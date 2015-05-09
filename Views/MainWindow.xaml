@@ -1,0 +1,185 @@
+﻿<Window x:Class="SearchSharp.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Converters="clr-namespace:SearchSharp.Converters"
+        xmlns:Views="clr-namespace:SearchSharp.Views"
+        Title="Sharp Search" Width="640" Height="480"
+        Background="Moccasin"
+        WindowStartupLocation="CenterScreen"
+        Icon="../res/appicon.png"
+        WindowState="Maximized">
+    <Window.Resources>
+        <Converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+        <Converters:BoolToVisibilityConverterInverted x:Key="boolToVisibilityConverterInverted"/>
+        <Converters:SearchStateToTextConverter x:Key="searchStateToTextConverter"/>
+        <Converters:BytesToStringConverter x:Key="bytesToStringConverter"/>
+        <Converters:DateTimeToTextConverter x:Key="dateTimeToTextConverter" />
+        <Style x:Key="dataGridStyle" TargetType="DataGrid">
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="_rootGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock HorizontalAlignment="Right" Margin="5,8">
+                <Hyperlink x:Name="_regexTesterLink" Click="_regexTesterLink_OnClick">
+                    Regex tester
+                </Hyperlink>
+        </TextBlock>
+
+        <TabControl Margin="5,5,2,5">
+            <TabItem Header="Search">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Search in:" Margin="5" VerticalAlignment="Center"></TextBlock>
+                    <Grid Grid.Column="1" Grid.ColumnSpan="2" IsEnabled="{Binding NotSearching}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox TabIndex="0" x:Name="_searchInTextBox" Text="{Binding SearchPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"></TextBox>
+                        <ToggleButton TabIndex="4" Grid.Column="1" Margin="2,5,5,5" ToolTip="{Binding RecurseToolTip}" IsChecked="{Binding Recurse}">
+                            <Image Source="../res/recurse.png" Height="16" Width="16"></Image>
+                        </ToggleButton>
+                    </Grid>
+                    <TextBlock Text="Files named:" Grid.Row="1" Margin="5" VerticalAlignment="Center"></TextBlock>
+                    <TextBox TabIndex="1" x:Name="_fileSpecTextBox" Text="{Binding FileSpec, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Margin="5"
+                             IsEnabled="{Binding NotSearching}"/>
+                    <Border Height="17" Width="17" BorderThickness="1" Padding="0" BorderBrush="Transparent" 
+                            IsEnabled="{Binding NotSearching}"
+                            MouseEnter="RegexSettingsButton_OnMouseEnter" MouseLeave="RegexSettingsButton_OnMouseLeave"
+                            Grid.Column="1" Grid.Row="1" Margin="5,5,8,5" HorizontalAlignment="Right"
+                            Visibility="{Binding FileSpecRegex, Converter={StaticResource boolToVisibilityConverter}}"
+                            MouseLeftButtonUp="FileNameRegexSettingsButton_OnMouseLeftButtonUp"
+                            ToolTip="Regex options and tester."
+                            >
+                        <Image x:Name="_fileNameRegexButton" Source="../res/settings.png" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2"
+                        IsEnabled="{Binding NotSearching}">
+                        <ToggleButton TabIndex="5" Margin="2,5" ToolTip="{Binding FileSpecMatchCaseToolTip}" IsChecked="{Binding FileSpecMatchCase}">
+                            <Image Source="../res/matchcase.png" Height="16" Width="16"></Image>
+                        </ToggleButton>
+                        <ToggleButton TabIndex="6" Margin="2,5" ToolTip="{Binding FileSpecRegexToolTip}" IsChecked="{Binding FileSpecRegex}">
+                            <Image Source="../res/regex.png" Height="16" Width="16"></Image>
+                        </ToggleButton>
+                        <ToggleButton TabIndex="7" Margin="2,5,5,5" ToolTip="{Binding FileSpecNotToolTip}" IsChecked="{Binding FileSpecNot}">
+                            <Image Source="../res/not.png" Height="16" Width="16"></Image>
+                        </ToggleButton>
+                    </StackPanel>
+                    <TextBlock Text="Containing text:" Grid.Row="2" Margin="5" VerticalAlignment="Center"
+                               IsEnabled="{Binding NotSearching}"/>
+                    <TextBox TabIndex="2" x:Name="_containingTextTextBox" Text="{Binding ContainingText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" Margin="5"
+                             IsEnabled="{Binding NotSearching}"/>
+                    <Border Height="17" Width="17" BorderThickness="1" Padding="0" BorderBrush="Transparent" 
+                            MouseEnter="RegexSettingsButton_OnMouseEnter" MouseLeave="RegexSettingsButton_OnMouseLeave"
+                            IsEnabled="{Binding NotSearching}"
+                            Grid.Column="1" Grid.Row="2" Margin="5,5,8,5" HorizontalAlignment="Right"
+                            Visibility="{Binding ContainingTextRegex, Converter={StaticResource boolToVisibilityConverter}}"
+                            MouseLeftButtonUp="ContainingTextRegexSettingsButton_OnMouseLeftButtonUp"
+                            ToolTip="Regex options and tester.">
+                        <Image Source="../res/settings.png" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2"
+                                IsEnabled="{Binding NotSearching}">
+                        <ToggleButton TabIndex="8" Margin="2,5" ToolTip="{Binding ContainingTextMatchCaseToolTip}" IsChecked="{Binding ContainingTextMatchCase}">
+                            <Image Source="../res/matchcase.png" Height="16" Width="16"></Image>
+                        </ToggleButton>
+                        <ToggleButton TabIndex="9" Margin="2,5" ToolTip="{Binding ContainingTextRegexToolTip}" IsChecked="{Binding ContainingTextRegex}">
+                            <Image Source="../res/regex.png" Height="16" Width="16"></Image>
+                        </ToggleButton>
+                        <ToggleButton TabIndex="10" Margin="2,5,5,5" ToolTip="{Binding ContainingTextNotTip}" IsChecked="{Binding ContainingTextNot}">
+                            <Image Source="../res/not.png" Height="16" Width="16"></Image>
+                        </ToggleButton>
+                    </StackPanel>
+                    <TextBlock Margin="5,0" Text="{Binding FoundTotalText}" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center"></TextBlock>
+                    <Views:ucSpinnerCogs Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,28,0"
+                                                     Visibility="{Binding Searching, Converter={StaticResource boolToVisibilityConverter}}"
+                                                     />
+                    <Button TabIndex="3" x:Name="_searchButton" Command="{Binding SearchCommand}" Grid.Row="3"
+                            Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="5" Padding="30,2"
+                            Content="{Binding Searching, Converter={StaticResource searchStateToTextConverter}}">
+                    </Button>
+                </Grid>
+                </TabItem>
+            </TabControl>
+
+            <DataGrid Grid.Row="1" Margin="5,5,2,5" ItemsSource="{Binding FoundFiles}" AutoGenerateColumns="False"
+                  Views:DataGridAttachedProperties.CanUserHideColumns="true"
+                  Style="{StaticResource dataGridStyle}"
+                  AlternatingRowBackground="Lavender"
+                  HorizontalGridLinesBrush="LightBlue"
+                  VerticalGridLinesBrush="LightBlue"
+                  SelectionUnit="FullRow"
+                  SelectionMode="Extended"
+                  MouseRightButtonUp="DataGrid_OnMouseRightButtonUp"
+                  SelectionChanged="DataGrid_OnSelectionChanged"
+                  
+                  >
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="4*" Header="Name" Binding="{Binding FileName}" IsReadOnly="True"></DataGridTextColumn>
+                <DataGridTextColumn Width="6*" Header="Path" Binding="{Binding FilePath}" IsReadOnly="True"></DataGridTextColumn>
+                <DataGridTextColumn Width="1*" Header="File Type" Binding="{Binding FileExtension}" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="2*" Header="Date Modified" Binding="{Binding DateModified, Converter={StaticResource dateTimeToTextConverter}}" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="Padding" Value="3,0" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="2*"  Header="Size (bytes)" Binding="{Binding SizeInBytes, Converter={StaticResource bytesToStringConverter}}" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Padding" Value="3,0" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+        <GridSplitter Grid.Column="1" Grid.RowSpan="2" x:Name="_gridSplitter"
+                      Background="Transparent"
+                      MouseEnter="_gridSplitter_OnMouseEnter"
+                      MouseLeave="_gridSplitter_OnMouseLeave"
+                      PreviewMouseDoubleClick="_gridSplitter_OnPreviewMouseDoubleClick"
+                      Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        
+        <TabControl Grid.Column="2" Grid.RowSpan="2" Margin="2,5,5,5">
+            <TabItem Header="Content">
+                <Views:FileContentView DataContext="{Binding ContentViewModel}" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
