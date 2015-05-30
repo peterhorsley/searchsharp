@@ -7,6 +7,35 @@ namespace SearchSharp.Views
 {
     public class ScrollSynchronizer : DependencyObject
     {
+
+
+        public static readonly DependencyProperty SynchronizeHorizontallyProperty = DependencyProperty.RegisterAttached(
+            "SynchronizeHorizontally", typeof (bool), typeof (ScrollSynchronizer), new PropertyMetadata(true));
+
+        public static void SetSynchronizeHorizontally(DependencyObject element, bool value)
+        {
+            element.SetValue(SynchronizeHorizontallyProperty, value);
+        }
+
+        public static bool GetSynchronizeHorizontally(DependencyObject element)
+        {
+            return (bool) element.GetValue(SynchronizeHorizontallyProperty);
+        }
+
+        public static readonly DependencyProperty SynchronizeVerticallyProperty = DependencyProperty.RegisterAttached(
+            "SynchronizeVertically", typeof (bool), typeof (ScrollSynchronizer), new PropertyMetadata(true));
+
+        public static void SetSynchronizeVertically(DependencyObject element, bool value)
+        {
+            element.SetValue(SynchronizeVerticallyProperty, value);
+        }
+
+        public static bool GetSynchronizeVertically(DependencyObject element)
+        {
+            return (bool) element.GetValue(SynchronizeVerticallyProperty);
+        }
+        
+
         /// <summary>
         /// Identifies the attached property ScrollGroup
         /// </summary>
@@ -70,6 +99,8 @@ namespace SearchSharp.Views
             var scrollViewer = d as ScrollViewer;
             if (scrollViewer != null)
             {
+                bool horizontalEnabled = (bool)d.GetValue(SynchronizeHorizontallyProperty);
+                bool verticalEnabled = (bool)d.GetValue(SynchronizeVerticallyProperty); 
                 if (!string.IsNullOrEmpty((string)e.OldValue))
                 {
                     // Remove scrollviewer
@@ -88,23 +119,29 @@ namespace SearchSharp.Views
 
                 if (!string.IsNullOrEmpty((string)e.NewValue))
                 {
-                    // If group already exists, set scrollposition of new scrollviewer to the scrollposition of the group
-                    if (horizontalScrollOffsets.Keys.Contains((string)e.NewValue))
+                    if (horizontalEnabled)
                     {
-                        scrollViewer.ScrollToHorizontalOffset(horizontalScrollOffsets[(string)e.NewValue]);
-                    }
-                    else
-                    {
-                        horizontalScrollOffsets.Add((string)e.NewValue, scrollViewer.HorizontalOffset);
+                        // If group already exists, set scrollposition of new scrollviewer to the scrollposition of the group
+                        if (horizontalScrollOffsets.Keys.Contains((string)e.NewValue))
+                        {
+                            scrollViewer.ScrollToHorizontalOffset(horizontalScrollOffsets[(string)e.NewValue]);
+                        }
+                        else
+                        {
+                            horizontalScrollOffsets.Add((string)e.NewValue, scrollViewer.HorizontalOffset);
+                        }
                     }
 
-                    if (verticalScrollOffsets.Keys.Contains((string)e.NewValue))
+                    if (verticalEnabled)
                     {
-                        scrollViewer.ScrollToVerticalOffset(verticalScrollOffsets[(string)e.NewValue]);
-                    }
-                    else
-                    {
-                        verticalScrollOffsets.Add((string)e.NewValue, scrollViewer.VerticalOffset);
+                        if (verticalScrollOffsets.Keys.Contains((string)e.NewValue))
+                        {
+                            scrollViewer.ScrollToVerticalOffset(verticalScrollOffsets[(string)e.NewValue]);
+                        }
+                        else
+                        {
+                            verticalScrollOffsets.Add((string)e.NewValue, scrollViewer.VerticalOffset);
+                        }
                     }
 
                     // Add scrollviewer
@@ -238,16 +275,25 @@ namespace SearchSharp.Views
             verticalScrollOffsets[group] = changedScrollViewer.VerticalOffset;
             horizontalScrollOffsets[group] = changedScrollViewer.HorizontalOffset;
 
+            bool horizontalEnabled = (bool)changedScrollViewer.GetValue(SynchronizeHorizontallyProperty);
+            bool verticalEnabled = (bool)changedScrollViewer.GetValue(SynchronizeVerticallyProperty); 
+
             foreach (var scrollViewer in scrollViewers.Where((s) => s.Value == group && s.Key != changedScrollViewer))
             {
-                if (scrollViewer.Key.VerticalOffset != changedScrollViewer.VerticalOffset)
+                if (verticalEnabled)
                 {
-                    scrollViewer.Key.ScrollToVerticalOffset(changedScrollViewer.VerticalOffset);
+                    if (scrollViewer.Key.VerticalOffset != changedScrollViewer.VerticalOffset)
+                    {
+                        scrollViewer.Key.ScrollToVerticalOffset(changedScrollViewer.VerticalOffset);
+                    }
                 }
 
-                if (scrollViewer.Key.HorizontalOffset != changedScrollViewer.HorizontalOffset)
+                if (horizontalEnabled)
                 {
-                    scrollViewer.Key.ScrollToHorizontalOffset(changedScrollViewer.HorizontalOffset);
+                    if (scrollViewer.Key.HorizontalOffset != changedScrollViewer.HorizontalOffset)
+                    {
+                        scrollViewer.Key.ScrollToHorizontalOffset(changedScrollViewer.HorizontalOffset);
+                    }
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System;
 
 namespace SearchSharp.ViewModels
 {
@@ -13,12 +14,12 @@ namespace SearchSharp.ViewModels
         public RegexWindowViewModel()
         {
             TitleText = "Regex Options";
-            ContentViewModel = new FileContentViewModel() { SelectedFileCount = 1 };
+            ContentViewModel = new TextContentViewModel() { SelectedFileCount = 1, ShowFullContent = true };
         }
 
         public bool Apply { get; set; }
 
-        public FileContentViewModel ContentViewModel { get; private set; }
+        public TextContentViewModel ContentViewModel { get; private set; }
 
         public void UseInput()
         {
@@ -64,7 +65,7 @@ namespace SearchSharp.ViewModels
 
         private void UpdateTestContent()
         {
-            ContentViewModel.ExecutedFileContentSearchParameters = new FileContentSearchParameters(RegexString, false, false, true, Options);
+            ContentViewModel.ExecutedFileContentSearchParameters = new FileContentSearchParameters(RegexString, false, false, true, Options, ContentViewModel);
         }
 
         public bool MultiLine
@@ -114,5 +115,11 @@ namespace SearchSharp.ViewModels
         }
 
         public string TitleText { get; set; }
+
+        public void CopyAsCSharp()
+        {
+            var csharp = String.Format("var regex = new Regex(@\"{0}\");", RegexString);
+            System.Windows.Clipboard.SetDataObject(csharp);
+        }
     }
 }

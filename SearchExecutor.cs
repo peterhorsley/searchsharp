@@ -61,46 +61,53 @@ namespace SearchSharp
                 return;
             }
 
-            Regex regex = null;
-            RegexOptions options = mViewModel.FileSpecMatchCase ? RegexOptions.Compiled : RegexOptions.Compiled | RegexOptions.IgnoreCase;
-            if (mViewModel.FileSpecRegex)
+            var matchingFileNames = new List<string>();
+            if (mViewModel.FileSpec == "")
             {
-                options |= mViewModel.FileSpecRegexOptions;
-                try
-                {
-                    regex = new Regex(mViewModel.FileSpec, options);
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(String.Format("Invalid regex pattern '{0}' - {1}", mViewModel.FileSpecRegex, ex.Message));
-                    return;
-                }
+                matchingFileNames.AddRange(allFiles);
             }
             else
             {
-                try
+                Regex regex;
+                RegexOptions options = mViewModel.FileSpecMatchCase ? RegexOptions.Compiled : RegexOptions.Compiled | RegexOptions.IgnoreCase;
+                if (mViewModel.FileSpecRegex)
                 {
-                    regex = FindFilesPatternToRegex.Convert(mViewModel.FileSpec, options);
+                    options |= mViewModel.FileSpecRegexOptions;
+                    try
+                    {
+                        regex = new Regex(mViewModel.FileSpec, options);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(String.Format("Invalid regex pattern '{0}' - {1}", mViewModel.FileSpecRegex, ex.Message));
+                        return;
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Trace.WriteLine(String.Format("Invalid wildcard pattern '{0}' - {1}", mViewModel.FileSpecRegex, ex.Message));
-                    return;
+                    try
+                    {
+                        regex = FindFilesPatternToRegex.Convert(mViewModel.FileSpec, options);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(String.Format("Invalid wildcard pattern '{0}' - {1}", mViewModel.FileSpecRegex, ex.Message));
+                        return;
+                    }
                 }
-            }
 
-            var matchingFileNames = new List<string>();
-            foreach (var file in allFiles)
-            {
-                if (_worker.CancellationPending)
+                foreach (var file in allFiles)
                 {
-                    return;
-                }
+                    if (_worker.CancellationPending)
+                    {
+                        return;
+                    }
 
-                var isMatch = regex.IsMatch(Path.GetFileName(file));
-                if (isMatch != mViewModel.FileSpecNot)
-                {
-                    matchingFileNames.Add(file);
+                    var isMatch = regex.IsMatch(Path.GetFileName(file));
+                    if (isMatch != mViewModel.FileSpecNot)
+                    {
+                        matchingFileNames.Add(file);
+                    }
                 }
             }
 

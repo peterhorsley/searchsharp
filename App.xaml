@@ -1,8 +1,13 @@
 ﻿<Application x:Class="SearchSharp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Converters="clr-namespace:SearchSharp.Converters"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <Converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+        <Converters:BoolToVisibilityConverterInverted x:Key="boolToVisibilityConverterInverted"/>
+        <Converters:SearchStateToTextConverter x:Key="searchStateToTextConverter"/>
+        <Converters:BytesToStringConverter x:Key="bytesToStringConverter"/>
+        <Converters:DateTimeToTextConverter x:Key="dateTimeToTextConverter" />
     </Application.Resources>
 </Application>

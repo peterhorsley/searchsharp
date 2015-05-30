@@ -56,6 +56,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -63,16 +64,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ActionCommand.cs" />
+    <Compile Include="ViewModels\ContentViewModel.cs" />
+    <Compile Include="ViewModels\BinaryContentViewModel.cs" />
+    <Compile Include="Views\BinaryContentView.xaml.cs">
+      <DependentUpon>BinaryContentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BindableRichTextBox.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BytesToStringConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverterInverted.cs" />
     <Compile Include="Views\DataGridAttachedProperties.cs" />
     <Compile Include="Converters\DateTimeToTextConverter.cs" />
-    <Compile Include="Views\FileContentView.xaml.cs">
-      <DependentUpon>FileContentView.xaml</DependentUpon>
+    <Compile Include="Views\TextContentView.xaml.cs">
+      <DependentUpon>TextContentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\FileContentViewModel.cs" />
+    <Compile Include="ViewModels\TextContentViewModel.cs" />
     <Compile Include="FindFilesPatternToRegex.cs" />
     <Compile Include="ViewModels\FoundFileViewModel.cs" />
     <Compile Include="Views\RegexWindow.xaml.cs">
@@ -91,7 +97,11 @@
       <DependentUpon>ucSpinnerCogs.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ViewModel.cs" />
-    <Page Include="Views\FileContentView.xaml">
+    <Page Include="Views\BinaryContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TextContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,6 +168,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj">
+      <Project>{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}</Project>
+      <Name>Be.Windows.Forms.HexBox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

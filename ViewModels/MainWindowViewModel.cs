@@ -34,7 +34,8 @@ namespace SearchSharp.ViewModels
         public MainWindowViewModel()
         {
             FoundFiles = new ObservableCollection<FoundFileViewModel>();
-            ContentViewModel = new FileContentViewModel();
+            TextContentViewModel = new TextContentViewModel();
+            BinaryContentViewModel = new BinaryContentViewModel();
             SearchCommand = new ActionCommand(RunSearch);
             mSelectedFiles = new List<FoundFileViewModel>();
             _executor = new SearchExecutor(this);
@@ -43,7 +44,8 @@ namespace SearchSharp.ViewModels
             _worker.RunWorkerCompleted += worker_RunWorkerCompleted;
         }
 
-        public FileContentViewModel ContentViewModel { get; private set; }
+        public TextContentViewModel TextContentViewModel { get; private set; }
+        public BinaryContentViewModel BinaryContentViewModel { get; private set; }
 
         public bool Recurse
         {
@@ -226,11 +228,18 @@ namespace SearchSharp.ViewModels
                 RaisePropertyChanged("FoundTotalText");
             }
 
-            ContentViewModel.ExecutedFileContentSearchParameters = new FileContentSearchParameters(
-                ContainingText, ContainingTextMatchCase, ContainingTextNot, ContainingTextRegex, ContainingTextRegexOptions);
+            TextContentViewModel.ExecutedFileContentSearchParameters = new FileContentSearchParameters(
+                ContainingText, 
+                ContainingTextMatchCase, 
+                ContainingTextNot, 
+                ContainingTextRegex, 
+                ContainingTextRegexOptions,
+                TextContentViewModel);
 
             _worker.RunWorkerAsync();
         }
+
+
 
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -279,20 +288,23 @@ namespace SearchSharp.ViewModels
             if (SelectedFiles.Count == 1)
             {
                 var file = SelectedFiles.First();
-                ContentViewModel.SelectedFileTooBig = (file.SizeInBytes > _maxFileSizeInBytesToShowContent);
+                TextContentViewModel.SelectedFileTooBig = (file.SizeInBytes > _maxFileSizeInBytesToShowContent);
 
-                if (!ContentViewModel.SelectedFileTooBig)
+                if (!TextContentViewModel.SelectedFileTooBig)
                 {
                     var content = File.ReadAllText(file.FilePath);
-                    ContentViewModel.SelectedFileContent = content;
+                    TextContentViewModel.SelectedFileContent = content;
                 }
+                BinaryContentViewModel.LoadFile(file.FilePath);
             }
             else
             {
-                ContentViewModel.LineNumbers = String.Empty;
+                TextContentViewModel.LineNumbers = String.Empty;
+                BinaryContentViewModel.CloseFile();
             }
 
-            ContentViewModel.SelectedFileCount = SelectedFiles.Count;
+            TextContentViewModel.SelectedFileCount = SelectedFiles.Count;
+            BinaryContentViewModel.SelectedFileCount = SelectedFiles.Count;
         }
     }
 }

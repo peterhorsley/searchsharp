@@ -28,9 +28,16 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock Margin="5" Text="Regex expression:"></TextBlock>
-            <TextBox Margin="5,0" Grid.Row="1" Height="23" VerticalAlignment="Top"
+            <StackPanel Grid.Row="1">
+                <TextBox Margin="5,0" Height="23" VerticalAlignment="Top" x:Name="_regexTextBox" Loaded="_regexTextBox_OnLoaded"
                      Text="{Binding RegexString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     ></TextBox>
+                     />
+                <TextBlock Margin="5,0,5,0" HorizontalAlignment="Right">                
+                    <Hyperlink x:Name="_copyRegexLink" Click="_copyRegexLink_OnClick">
+                        Copy as C#
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
             <Rectangle Grid.Column="1" Grid.RowSpan="2" Stroke="Gray" Margin="5" Width="1"></Rectangle>
             <TextBlock Grid.Column="2" Margin="5" Text="Regex options:"></TextBlock>
             <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Margin="5,0">
@@ -66,7 +73,7 @@
                         <TextBox Text="{Binding InputString}" AcceptsReturn="True" />
                     </Grid>
                     <Grid Visibility="{Binding SettingInput, Converter={StaticResource boolToVisibilityConverterInverted}}">
-                        <Views:FileContentView DataContext="{Binding ContentViewModel}" />
+                        <Views:TextContentView DataContext="{Binding TextContentViewModel}" />
                     </Grid>
                 </Grid>
             </TabItem>

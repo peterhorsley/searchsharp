@@ -51,12 +51,22 @@ namespace SearchSharp.Views
             _viewModel.UseInput();
         }
 
+        private void _copyRegexLink_OnClick(object sender, RoutedEventArgs e)
+        {
+            _viewModel.CopyAsCSharp();
+        }
+
         private void RegexWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
                 Close();
             }
+        }
+
+        private void _regexTextBox_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _regexTextBox.Focus();
         }
     }
 }

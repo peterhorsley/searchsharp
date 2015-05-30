@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -8,11 +10,17 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
+using SearchSharp.ViewModels;
 
 namespace SearchSharp.Converters
 {
     public class FileToFlowDocumentConverter : IMultiValueConverter
     {
+        private SolidColorBrush _blue = new SolidColorBrush(Colors.Blue);
+        private SolidColorBrush _yellow = new SolidColorBrush(Colors.Yellow);
+        private const int _linesOfContext = 2;
+
         public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             FlowDocument doc = new FlowDocument();
@@ -23,8 +31,6 @@ namespace SearchSharp.Converters
                 return doc;
             }
 
-            var blue = new SolidColorBrush(Colors.Blue);
-            var yellow = new SolidColorBrush(Colors.Yellow);
             var fileCount = (int)value[0];
             if (fileCount != 1)
             {
@@ -41,51 +47,118 @@ namespace SearchSharp.Converters
                 }
                 else
                 {
-                    var contentSearchParameters = value[3] as FileContentSearchParameters;
+                    var showFullContent = (bool)value[3];
+                    var contentSearchParameters = value[4] as FileContentSearchParameters;
+                    var paragraphs = new List<Paragraph>();
 
-                    if (!String.IsNullOrEmpty(contentSearchParameters.ContainingText) && 
-                        !contentSearchParameters.ContainingTextNot && 
+                    if (!String.IsNullOrEmpty(contentSearchParameters.ContainingText) &&
+                        !contentSearchParameters.ContainingTextNot &&
                         contentSearchParameters.ContainingTextRegex)
                     {
                         // Regex highlighting must support multi-line so we do this way differently.
-                        var paragraph = new Paragraph();
                         var options = contentSearchParameters.ContainingTextMatchCase ? RegexOptions.None : RegexOptions.IgnoreCase;
                         options |= contentSearchParameters.ContainingTextRegexOptions;
-                        var regex = new Regex(contentSearchParameters.ContainingText, options);
-                        var matches = regex.Matches(fileContent);
+
+                        Regex regex = null;
+                        try
+                        {
+                            regex = new Regex(contentSearchParameters.ContainingText, options);
+                        }
+                        catch (ArgumentException)
+                        {
+                            // It's possible for the user to enter an invalid regex, just ignore.
+                        }
+
                         int index = 0;
-                        foreach (Match match in matches)
+                        if (regex != null)
                         {
-                            var nonHighlighted = fileContent.Substring(index, match.Index - index);
-                            var highlighted = fileContent.Substring(match.Index, match.Length);
-                            if (nonHighlighted.EndsWith("\r"))
+                            var matches = regex.Matches(fileContent);
+                            foreach (Match match in matches)
                             {
-                                nonHighlighted = nonHighlighted.Substring(0, nonHighlighted.Length - 1);
-                            }
-                            if (highlighted.EndsWith("\r"))
-                            {
-                                highlighted = highlighted.Substring(0, highlighted.Length - 1);
+                                var nonHighlighted = fileContent.Substring(index, match.Index - index);
+                                var highlighted = fileContent.Substring(match.Index, match.Length);
+                                if (nonHighlighted.EndsWith("\r"))
+                                {
+                                    nonHighlighted = nonHighlighted.Substring(0, nonHighlighted.Length - 1);
+                                }
+                                if (highlighted.EndsWith("\r"))
+                                {
+                                    highlighted = highlighted.Substring(0, highlighted.Length - 1);
+                                }
+
+
+                                bool append = paragraphs.Count > 0;
+                                foreach (var line in TextContentViewModel.SplitStringIntoLines(nonHighlighted))
+                                {
+                                    var run = new Run(line);
+                                    if (append)
+                                    {
+                                        paragraphs[paragraphs.Count - 1].Inlines.Add(run);
+                                        append = false;
+                                    }
+                                    else
+                                    {
+                                        var paragraph = new Paragraph();
+                                        paragraph.Inlines.Add(run);
+                                        paragraphs.Add(paragraph);
+                                    }
+                                }
+
+                                append = true;
+                                foreach (var line in TextContentViewModel.SplitStringIntoLines(highlighted))
+                                {
+                                    var run = new Run(line) { Background = _yellow };
+                                    if (append)
+                                    {
+                                        paragraphs[paragraphs.Count - 1].Inlines.Add(run);
+                                        append = false;
+                                    }
+                                    else
+                                    {
+                                        var paragraph = new Paragraph();
+                                        paragraph.Inlines.Add(run);
+                                        paragraphs.Add(paragraph);
+                                    }
+                                }
+
+                                index = match.Index + match.Length;
                             }
 
-                            paragraph.Inlines.Add(new Run(nonHighlighted));
-                            paragraph.Inlines.Add(new Run(highlighted){ Background = yellow});
-                        
-                            index = match.Index + match.Length;
+                            if (index < fileContent.Length)
+                            {
+                                bool append = true;
+                                foreach (var line in TextContentViewModel.SplitStringIntoLines(fileContent.Substring(index)))
+                                {
+                                    var run = new Run(line);
+                                    if (append)
+                                    {
+                                        paragraphs[paragraphs.Count - 1].Inlines.Add(run);
+                                        append = false;
+                                    }
+                                    else
+                                    {
+                                        var paragraph = new Paragraph();
+                                        paragraph.Inlines.Add(run);
+                                        paragraphs.Add(paragraph);
+                                    }
+                                }
+                            }
                         }
-
-                        if (index < fileContent.Length)
+                        else
                         {
-                            paragraph.Inlines.Add(new Run(fileContent.Substring(index)));
+                            foreach (var line in TextContentViewModel.SplitStringIntoLines(fileContent))
+                            {
+                                var paragraph = new Paragraph();
+                                paragraph.Inlines.Add(new Run(line));
+                                paragraphs.Add(paragraph);
+                            }
                         }
-
-                        doc.Blocks.Add(paragraph);
                     }
                     else
                     {
                         using (StringReader reader = new StringReader(fileContent))
                         {
                             string line;
-                            int lineNumber = 1;
                             while ((line = reader.ReadLine()) != null)
                             {
                                 var paragraph = new Paragraph();
@@ -105,7 +178,7 @@ namespace SearchSharp.Converters
                                         {
                                             paragraph.Inlines.Add(new Run(line.Substring(index, nextIndex - index)));
                                             var run = new Run(line.Substring(nextIndex, contentSearchParameters.ContainingText.Length));
-                                            run.Background = yellow;
+                                            run.Background = _yellow;
                                             paragraph.Inlines.Add(run);
                                             index = nextIndex + contentSearchParameters.ContainingText.Length;
                                         }
@@ -116,13 +189,58 @@ namespace SearchSharp.Converters
                                             break;
                                         }
                                     }
-                                
                                 }
 
-                                doc.Blocks.Add(paragraph);
-                                lineNumber++;
+                                paragraphs.Add(paragraph);
                             }
                         }
+                    }
+
+                    if (!showFullContent)
+                    {
+                        var lineNumbers = new List<string>();
+                        bool elipsesAdded = false;
+                        var indexesAdded = new List<int>();
+                        for (int i = 0; i < paragraphs.Count; i++)
+                        {
+                            var para = paragraphs[i];
+                            if (ContainsHighlighting(para))
+                            {
+                                int indexAFewLinesAgo = Math.Max(0, i - _linesOfContext);
+                                i = Math.Min(paragraphs.Count - 1, i + _linesOfContext);
+                                while (indexAFewLinesAgo <= i)
+                                {
+                                    if (!indexesAdded.Contains(indexAFewLinesAgo))
+                                    {
+                                        doc.Blocks.Add(paragraphs[indexAFewLinesAgo]);
+                                        indexesAdded.Add(indexAFewLinesAgo);
+                                        lineNumbers.Add((indexAFewLinesAgo + 1).ToString());
+                                    }
+                                    indexAFewLinesAgo++;
+                                }
+                                elipsesAdded = false;
+                            }
+                            else if (!elipsesAdded)
+                            {
+                                var elipsesPara = new Paragraph();
+                                var elipsesText = GetElipsesText();
+                                elipsesPara.Inlines.Add(elipsesText);
+                                lineNumbers.Add(""); // Add a blank line number
+                                doc.Blocks.Add(elipsesPara);
+                                elipsesAdded = true;
+                            }
+                        }
+                        contentSearchParameters.ContentViewModel.SetLineNumbers(lineNumbers);
+                    }
+                    else
+                    {
+                        doc.Blocks.AddRange(paragraphs);
+                        var lineNumbers = new List<string>();
+                        for (int i = 1; i <= paragraphs.Count; i++)
+                        {
+                            lineNumbers.Add(i.ToString());
+                        }
+                        contentSearchParameters.ContentViewModel.SetLineNumbers(lineNumbers);
                     }
                 }
             }
@@ -132,16 +250,16 @@ namespace SearchSharp.Converters
             foreach (Paragraph p in doc.Blocks)
             {
                 StringBuilder lineText = new StringBuilder();
-                
+
                 foreach (Run r in p.Inlines)
                 {
                     lineText.Append(r.Text);
                 }
 
                 var line = lineText.ToString();
-                FormattedText f = new FormattedText(line, 
-                    Thread.CurrentThread.CurrentUICulture, 
-                    FlowDirection.LeftToRight, 
+                FormattedText f = new FormattedText(line,
+                    Thread.CurrentThread.CurrentUICulture,
+                    FlowDirection.LeftToRight,
                     new Typeface("Consolas"), 12, Brushes.Black);
 
                 longestLine = f.Width > longestLine ? f.Width : longestLine;
@@ -149,6 +267,25 @@ namespace SearchSharp.Converters
 
             doc.PageWidth = longestLine + 50;
             return doc;
+        }
+
+        private Run GetElipsesText()
+        {
+            var elipsesText = new Run("...") { Foreground = _blue };
+            return elipsesText;
+        }
+
+        private bool ContainsHighlighting(Paragraph para)
+        {
+            foreach (Run run in para.Inlines)
+            {
+                if (run.Background == _yellow)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

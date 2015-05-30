@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 
 namespace SearchSharp.ViewModels
 {
-    public class FileContentViewModel : ViewModel
+    public class TextContentViewModel : ContentViewModel
     {
         private string _lineNumbers;
         private string _selectedFileContent = "";
         private FileContentSearchParameters _fileContentSearchParams;
-        private int _selectedFileCount;
         private bool _selectedFileTooBig;
+        private bool _showFullContent = false;
 
-        public FileContentViewModel()
+        public TextContentViewModel()
         {
             ScrollGroupId = Guid.NewGuid().ToString();
         }
@@ -31,8 +32,7 @@ namespace SearchSharp.ViewModels
 
         private string GetLineNumbersForText(string content)
         {
-            var contentWithJustLineFeed = content.Replace("\r\n", "\n");
-            var lines = contentWithJustLineFeed.Split(new char[] { '\n' });
+            var lines = SplitStringIntoLines(content);
             var lineNumberBuilder = new StringBuilder();
             for (int i = 1; i <= lines.Length; i++)
             {
@@ -41,14 +41,10 @@ namespace SearchSharp.ViewModels
             return lineNumberBuilder.ToString();
         }
 
-        public int SelectedFileCount
+        public static string[] SplitStringIntoLines(string content)
         {
-            get { return _selectedFileCount; }
-            set
-            {
-                _selectedFileCount = value;
-                RaisePropertyChanged("SelectedFileCount");
-            }
+            var contentWithJustLineFeed = content.Replace("\r\n", "\n");
+            return contentWithJustLineFeed.Split(new char[] {'\n'});
         }
 
         public FileContentSearchParameters ExecutedFileContentSearchParameters
@@ -61,6 +57,16 @@ namespace SearchSharp.ViewModels
             {
                 _fileContentSearchParams = value;
                 RaisePropertyChanged("ExecutedFileContentSearchParameters");
+            }
+        }
+
+        public bool ShowFullContent
+        {
+            get { return _showFullContent; }
+            set
+            {
+                _showFullContent = value;
+                RaisePropertyChanged("ShowFullContent");
             }
         }
 
@@ -82,6 +88,22 @@ namespace SearchSharp.ViewModels
                 _selectedFileTooBig = value;
                 RaisePropertyChanged("SelectedFileTooBig");
             }
+        }
+
+        public void SetLineNumbers(List<string> lineNumbers)
+        {
+            var lineNumberBuilder = new StringBuilder();
+            foreach (var entry in lineNumbers)
+            {
+                lineNumberBuilder.AppendLine(entry);
+            }
+
+            LineNumbers = lineNumberBuilder.ToString();
+        }
+
+        public void SetLineNumbers()
+        {
+            LineNumbers = GetLineNumbersForText(SelectedFileContent);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Automation.Peers;
@@ -209,6 +210,15 @@ namespace SearchSharp.Views
             };
             var regexWindow = new RegexWindow(regexViewModel, this);
             regexWindow.ShowDialog();
+        }
+
+        private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var file = mViewModel.SelectedFiles.FirstOrDefault();
+            if (file != null && File.Exists(file.FilePath))
+            {
+                Process.Start(file.FilePath);
+            }
         }
     }
 }

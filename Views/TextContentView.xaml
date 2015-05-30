@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SearchSharp.Views.FileContentView"
+﻿<UserControl x:Class="SearchSharp.Views.TextContentView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,15 +16,16 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <ScrollViewer 
-                        VerticalScrollBarVisibility="Hidden" 
-                        HorizontalScrollBarVisibility="Hidden"
-                        Views:ScrollSynchronizer.ScrollGroup="{Binding ScrollGroupId}"                                  
-                        >
+            VerticalScrollBarVisibility="Hidden" 
+            HorizontalScrollBarVisibility="Hidden"
+            Views:ScrollSynchronizer.ScrollGroup="{Binding ScrollGroupId}"                                  
+            Views:ScrollSynchronizer.SynchronizeHorizontally="false"
+            >
             <TextBlock TextWrapping="NoWrap" Text="{Binding LineNumbers}" 
-                                   Padding="0,2,0,0"
-                                   FontFamily="Consolas" FontSize="12"
-                                   VerticalAlignment="Stretch" 
-                                   HorizontalAlignment="Stretch"/>
+                        Padding="0,2,0,0"
+                        FontFamily="Consolas" FontSize="12"
+                        VerticalAlignment="Stretch" 
+                        HorizontalAlignment="Stretch"/>
         </ScrollViewer>
         <Views:BindableRichTextBox Grid.Column="1" BorderThickness="0"
                         HorizontalScrollBarVisibility="Auto" 
@@ -36,6 +37,7 @@
                     <Binding Path="SelectedFileCount" />
                     <Binding Path="SelectedFileContent" />
                     <Binding Path="SelectedFileTooBig" />
+                    <Binding Path="ShowFullContent" />
                     <Binding Path="ExecutedFileContentSearchParameters" />
                 </MultiBinding>
             </Views:BindableRichTextBox.Document>
@@ -45,6 +47,7 @@
                 </Style>
                 <Style TargetType="ScrollViewer">
                     <Setter Property="Views:ScrollSynchronizer.ScrollGroup" Value="{Binding ScrollGroupId}" />
+                    <Setter Property="Views:ScrollSynchronizer.SynchronizeHorizontally" Value="false" />
                 </Style>
             </Views:BindableRichTextBox.Resources>
         </Views:BindableRichTextBox>

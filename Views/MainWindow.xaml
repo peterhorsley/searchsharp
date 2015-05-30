@@ -9,11 +9,6 @@
         Icon="../res/appicon.png"
         WindowState="Maximized">
     <Window.Resources>
-        <Converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
-        <Converters:BoolToVisibilityConverterInverted x:Key="boolToVisibilityConverterInverted"/>
-        <Converters:SearchStateToTextConverter x:Key="searchStateToTextConverter"/>
-        <Converters:BytesToStringConverter x:Key="bytesToStringConverter"/>
-        <Converters:DateTimeToTextConverter x:Key="dateTimeToTextConverter" />
         <Style x:Key="dataGridStyle" TargetType="DataGrid">
             <Setter Property="CellStyle">
                 <Setter.Value>
@@ -138,6 +133,7 @@
                   SelectionMode="Extended"
                   MouseRightButtonUp="DataGrid_OnMouseRightButtonUp"
                   SelectionChanged="DataGrid_OnSelectionChanged"
+                      MouseDoubleClick="Control_OnMouseDoubleClick"
                   
                   >
             <DataGrid.Columns>
@@ -175,10 +171,17 @@
                       MouseLeave="_gridSplitter_OnMouseLeave"
                       PreviewMouseDoubleClick="_gridSplitter_OnPreviewMouseDoubleClick"
                       Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-        
+
+        <CheckBox IsChecked="{Binding TextContentViewModel.ShowFullContent, Mode=TwoWay}"
+                  HorizontalAlignment="Right" Margin="8,8" Grid.Column="2"
+                  >Show full content</CheckBox>
+
         <TabControl Grid.Column="2" Grid.RowSpan="2" Margin="2,5,5,5">
-            <TabItem Header="Content">
-                <Views:FileContentView DataContext="{Binding ContentViewModel}" />
+            <TabItem Header="Text Content">
+                <Views:TextContentView DataContext="{Binding TextContentViewModel}" />
+            </TabItem>
+            <TabItem Header="Binary Content">
+                <Views:BinaryContentView DataContext="{Binding BinaryContentViewModel}" />
             </TabItem>
         </TabControl>
     </Grid>
