@@ -66,6 +66,42 @@ namespace SearchSharp.ViewModels
         {
             return enabled ? "enabled" : "disabled";
         }
+        
+        public bool IsValidFileSpec
+        {
+            get
+            {
+                if (FileSpecRegex)
+                {
+                    return RegexTester.IsValid(FileSpec);
+                }
+                return true;
+            }
+        }
+
+        public bool IsValidSearchPath
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(SearchPath))
+                {
+                    return false;
+                }
+                return Directory.Exists(SearchPath);
+            }
+        }
+        
+        public bool IsValidContainingText
+        {
+            get
+            {
+                if (ContainingTextRegex)
+                {
+                    return RegexTester.IsValid(ContainingText);
+                }
+                return true;
+            }
+        }
 
         public string SearchPath
         {
@@ -74,6 +110,8 @@ namespace SearchSharp.ViewModels
             {
                 _searchPath = value;
                 RaisePropertyChanged("SearchPath");
+                RaisePropertyChanged("IsValidSearchPath");
+                RaisePropertyChanged("SearchInputsValid");
             }
         }
 
@@ -84,6 +122,8 @@ namespace SearchSharp.ViewModels
             {
                 _fileSpec = value;
                 RaisePropertyChanged("FileSpec");
+                RaisePropertyChanged("IsValidFileSpec");
+                RaisePropertyChanged("SearchInputsValid");
             }
         }
 
@@ -105,6 +145,8 @@ namespace SearchSharp.ViewModels
                 _fileSpecRegex = value;
                 RaisePropertyChanged("FileSpecRegex");
                 RaisePropertyChanged("FileSpecRegexToolTip");
+                RaisePropertyChanged("IsValidFileSpec");
+                RaisePropertyChanged("SearchInputsValid");
             }
         }
 
@@ -142,6 +184,8 @@ namespace SearchSharp.ViewModels
             {
                 _containingText = value;
                 RaisePropertyChanged("ContainingText");
+                RaisePropertyChanged("IsValidContainingText");
+                RaisePropertyChanged("SearchInputsValid");
             }
         }
 
@@ -155,6 +199,11 @@ namespace SearchSharp.ViewModels
             }
         }
 
+        public bool SearchInputsValid
+        {
+            get { return IsValidFileSpec && IsValidContainingText && IsValidSearchPath; }
+        }
+
         public bool ContainingTextRegex
         {
             get { return _containingTextRegex; }
@@ -163,6 +212,8 @@ namespace SearchSharp.ViewModels
                 _containingTextRegex = value;
                 RaisePropertyChanged("ContainingTextRegex");
                 RaisePropertyChanged("ContainingTextRegexToolTip");
+                RaisePropertyChanged("IsValidContainingText");
+                RaisePropertyChanged("SearchInputsValid");
             }
         }
 

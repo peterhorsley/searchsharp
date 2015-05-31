@@ -38,6 +38,7 @@
                     <Binding Path="SelectedFileContent" />
                     <Binding Path="SelectedFileTooBig" />
                     <Binding Path="ShowFullContent" />
+                    <Binding Path="LinesOfContext" />
                     <Binding Path="ExecutedFileContentSearchParameters" />
                 </MultiBinding>
             </Views:BindableRichTextBox.Document>

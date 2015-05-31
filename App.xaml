@@ -9,5 +9,6 @@
         <Converters:SearchStateToTextConverter x:Key="searchStateToTextConverter"/>
         <Converters:BytesToStringConverter x:Key="bytesToStringConverter"/>
         <Converters:DateTimeToTextConverter x:Key="dateTimeToTextConverter" />
+        <Converters:ValidityToColorConverter x:Key="validityToColorConverter" />
     </Application.Resources>
 </Application>

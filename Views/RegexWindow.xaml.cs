@@ -44,6 +44,7 @@ namespace SearchSharp.Views
         private void _setInputLink_OnClick(object sender, RoutedEventArgs e)
         {
             _viewModel.SettingInput = true;
+            _inputTextBox.Focus();
         }
 
         private void _useInputLink_OnClick(object sender, RoutedEventArgs e)

@@ -19,7 +19,7 @@ namespace SearchSharp.Converters
     {
         private SolidColorBrush _blue = new SolidColorBrush(Colors.Blue);
         private SolidColorBrush _yellow = new SolidColorBrush(Colors.Yellow);
-        private const int _linesOfContext = 2;
+        private int _linesOfContext = 2;
 
         public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -47,8 +47,9 @@ namespace SearchSharp.Converters
                 }
                 else
                 {
-                    var showFullContent = (bool)value[3];
-                    var contentSearchParameters = value[4] as FileContentSearchParameters;
+                    var contentSearchParameters = value[5] as FileContentSearchParameters;
+                    var showFullContent = (bool)value[3] || String.IsNullOrEmpty(contentSearchParameters.ContainingText) || contentSearchParameters.ContainingTextNot;
+                    _linesOfContext = (int)value[4];
                     var paragraphs = new List<Paragraph>();
 
                     if (!String.IsNullOrEmpty(contentSearchParameters.ContainingText) &&
@@ -126,7 +127,7 @@ namespace SearchSharp.Converters
 
                             if (index < fileContent.Length)
                             {
-                                bool append = true;
+                                bool append = paragraphs.Count > 0;
                                 foreach (var line in TextContentViewModel.SplitStringIntoLines(fileContent.Substring(index)))
                                 {
                                     var run = new Run(line);
@@ -206,12 +207,18 @@ namespace SearchSharp.Converters
                             var para = paragraphs[i];
                             if (ContainsHighlighting(para))
                             {
+                                int originalLineIndex = i;
                                 int indexAFewLinesAgo = Math.Max(0, i - _linesOfContext);
                                 i = Math.Min(paragraphs.Count - 1, i + _linesOfContext);
                                 while (indexAFewLinesAgo <= i)
                                 {
                                     if (!indexesAdded.Contains(indexAFewLinesAgo))
                                     {
+                                        if (indexAFewLinesAgo > originalLineIndex && ContainsHighlighting(paragraphs[indexAFewLinesAgo]))
+                                        {
+                                            i = indexAFewLinesAgo - 1;
+                                            break;
+                                        }
                                         doc.Blocks.Add(paragraphs[indexAFewLinesAgo]);
                                         indexesAdded.Add(indexAFewLinesAgo);
                                         lineNumbers.Add((indexAFewLinesAgo + 1).ToString());

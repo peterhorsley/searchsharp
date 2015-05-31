@@ -56,14 +56,15 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBox TabIndex="0" x:Name="_searchInTextBox" Text="{Binding SearchPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"></TextBox>
+                        <TextBox TabIndex="0" x:Name="_searchInTextBox" Text="{Binding SearchPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"
+                            Foreground="{Binding IsValidSearchPath, Converter={StaticResource validityToColorConverter}}"></TextBox>
                         <ToggleButton TabIndex="4" Grid.Column="1" Margin="2,5,5,5" ToolTip="{Binding RecurseToolTip}" IsChecked="{Binding Recurse}">
                             <Image Source="../res/recurse.png" Height="16" Width="16"></Image>
                         </ToggleButton>
                     </Grid>
                     <TextBlock Text="Files named:" Grid.Row="1" Margin="5" VerticalAlignment="Center"></TextBlock>
                     <TextBox TabIndex="1" x:Name="_fileSpecTextBox" Text="{Binding FileSpec, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Margin="5"
-                             IsEnabled="{Binding NotSearching}"/>
+                             IsEnabled="{Binding NotSearching}" Foreground="{Binding IsValidFileSpec, Converter={StaticResource validityToColorConverter}}"/>
                     <Border Height="17" Width="17" BorderThickness="1" Padding="0" BorderBrush="Transparent" 
                             IsEnabled="{Binding NotSearching}"
                             MouseEnter="RegexSettingsButton_OnMouseEnter" MouseLeave="RegexSettingsButton_OnMouseLeave"
@@ -89,7 +90,7 @@
                     <TextBlock Text="Containing text:" Grid.Row="2" Margin="5" VerticalAlignment="Center"
                                IsEnabled="{Binding NotSearching}"/>
                     <TextBox TabIndex="2" x:Name="_containingTextTextBox" Text="{Binding ContainingText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" Margin="5"
-                             IsEnabled="{Binding NotSearching}"/>
+                             IsEnabled="{Binding NotSearching}" Foreground="{Binding IsValidContainingText, Converter={StaticResource validityToColorConverter}}"/>
                     <Border Height="17" Width="17" BorderThickness="1" Padding="0" BorderBrush="Transparent" 
                             MouseEnter="RegexSettingsButton_OnMouseEnter" MouseLeave="RegexSettingsButton_OnMouseLeave"
                             IsEnabled="{Binding NotSearching}"
@@ -117,7 +118,9 @@
                                                      />
                     <Button TabIndex="3" x:Name="_searchButton" Command="{Binding SearchCommand}" Grid.Row="3"
                             Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="5" Padding="30,2"
-                            Content="{Binding Searching, Converter={StaticResource searchStateToTextConverter}}">
+                            Content="{Binding Searching, Converter={StaticResource searchStateToTextConverter}}"
+                            IsEnabled="{Binding SearchInputsValid}"
+                            >
                     </Button>
                 </Grid>
                 </TabItem>
@@ -172,13 +175,26 @@
                       PreviewMouseDoubleClick="_gridSplitter_OnPreviewMouseDoubleClick"
                       Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 
-        <CheckBox IsChecked="{Binding TextContentViewModel.ShowFullContent, Mode=TwoWay}"
-                  HorizontalAlignment="Right" Margin="8,8" Grid.Column="2"
-                  >Show full content</CheckBox>
-
         <TabControl Grid.Column="2" Grid.RowSpan="2" Margin="2,5,5,5">
             <TabItem Header="Text Content">
-                <Views:TextContentView DataContext="{Binding TextContentViewModel}" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding TextContentViewModel.LinesOfContextAvailable, Converter={StaticResource boolToVisibilityConverter}}">
+                            <TextBlock Text="Context Lines: " VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding TextContentViewModel.LinesOfContext}" VerticalAlignment="Center"/>
+                            <Button Margin="5,5,2,5" FontFamily="Consolas" Width="20" Command="{Binding TextContentViewModel.IncreaseLinesOfContextCommand}">+</Button>
+                            <Button Margin="2,5" FontFamily="Consolas" Width="20" Command="{Binding TextContentViewModel.DecreaseLinesOfContextCommand}">-</Button>
+                        </StackPanel>
+                        <CheckBox IsChecked="{Binding TextContentViewModel.ShowFullContent, Mode=TwoWay}" x:Name="_showFullContentCheckbox"
+                          HorizontalAlignment="Right" Margin="8,8"
+                          Visibility="{Binding TextContentViewModel.ContainingTextSpecifiedAndFileSelected, Converter={StaticResource boolToVisibilityConverter}}">Show full content</CheckBox>
+                    </StackPanel>
+                    <Views:TextContentView Grid.Row="1" DataContext="{Binding TextContentViewModel}" />
+                </Grid>
             </TabItem>
             <TabItem Header="Binary Content">
                 <Views:BinaryContentView DataContext="{Binding BinaryContentViewModel}" />

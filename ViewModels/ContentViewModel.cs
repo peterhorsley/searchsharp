@@ -13,10 +13,18 @@ namespace SearchSharp.ViewModels
             get { return _selectedFileCount; }
             set
             {
-                _selectedFileCount = value;
-                RaisePropertyChanged("SelectedFileCount");
-                RaisePropertyChanged("SingleFileSelected");
+                if (_selectedFileCount != value)
+                {
+                    _selectedFileCount = value;
+                    RaisePropertyChanged("SelectedFileCount");
+                    RaisePropertyChanged("SingleFileSelected");
+                    OnSelectedFileCountChanged();
+                }
             }
+        }
+
+        protected virtual void OnSelectedFileCountChanged()
+        {
         }
 
         public bool SingleFileSelected

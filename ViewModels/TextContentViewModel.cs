@@ -11,10 +11,32 @@ namespace SearchSharp.ViewModels
         private FileContentSearchParameters _fileContentSearchParams;
         private bool _selectedFileTooBig;
         private bool _showFullContent = false;
+        private int _linesOfContext = 2;
 
         public TextContentViewModel()
         {
             ScrollGroupId = Guid.NewGuid().ToString();
+
+            IncreaseLinesOfContextCommand = new DelegateCommand(
+                () => LinesOfContext++,
+                () => LinesOfContext < 10);
+
+            DecreaseLinesOfContextCommand = new DelegateCommand(
+                () => { LinesOfContext = Math.Max(0, LinesOfContext - 1); },
+                () => LinesOfContext > 0);
+        }
+
+        public DelegateCommand IncreaseLinesOfContextCommand { get; private set; }
+        public DelegateCommand DecreaseLinesOfContextCommand { get; private set; }
+
+        public int LinesOfContext
+        {
+            get { return _linesOfContext; }
+            set 
+            {
+                _linesOfContext = value; 
+                RaisePropertyChanged("LinesOfContext");
+            }
         }
 
         public String ScrollGroupId { get; private set; }
@@ -57,6 +79,7 @@ namespace SearchSharp.ViewModels
             {
                 _fileContentSearchParams = value;
                 RaisePropertyChanged("ExecutedFileContentSearchParameters");
+                RaisePropertyChanged("LinesOfContextAvailable");
             }
         }
 
@@ -67,6 +90,7 @@ namespace SearchSharp.ViewModels
             {
                 _showFullContent = value;
                 RaisePropertyChanged("ShowFullContent");
+                RaisePropertyChanged("LinesOfContextAvailable");
             }
         }
 
@@ -104,6 +128,31 @@ namespace SearchSharp.ViewModels
         public void SetLineNumbers()
         {
             LineNumbers = GetLineNumbersForText(SelectedFileContent);
+        }
+
+        public bool ContainingTextSpecified
+        {
+            get { return ExecutedFileContentSearchParameters != null && 
+                !String.IsNullOrEmpty(ExecutedFileContentSearchParameters.ContainingText) && 
+                !ExecutedFileContentSearchParameters.ContainingTextNot; }
+        }
+
+        public bool LinesOfContextAvailable
+        {
+            get { return ContainingTextSpecifiedAndFileSelected && !ShowFullContent; }
+        }
+
+        public bool ContainingTextSpecifiedAndFileSelected
+        {
+            get { return ContainingTextSpecified && SingleFileSelected; }
+        }
+
+        protected override void OnSelectedFileCountChanged()
+        {
+            base.OnSelectedFileCountChanged();
+            RaisePropertyChanged("ContainingTextSpecified");
+            RaisePropertyChanged("ContainingTextSpecifiedAndFileSelected");
+            RaisePropertyChanged("LinesOfContextAvailable");
         }
     }
 }

@@ -64,8 +64,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ActionCommand.cs" />
+    <Compile Include="BaseCommand.cs" />
+    <Compile Include="Converters\ValidityToColorConverter.cs" />
+    <Compile Include="RegexTester.cs" />
     <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\BinaryContentViewModel.cs" />
+    <Compile Include="DelegateCommand.cs" />
     <Compile Include="Views\BinaryContentView.xaml.cs">
       <DependentUpon>BinaryContentView.xaml</DependentUpon>
     </Compile>

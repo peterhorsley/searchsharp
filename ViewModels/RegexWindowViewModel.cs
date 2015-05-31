@@ -14,16 +14,16 @@ namespace SearchSharp.ViewModels
         public RegexWindowViewModel()
         {
             TitleText = "Regex Options";
-            ContentViewModel = new TextContentViewModel() { SelectedFileCount = 1, ShowFullContent = true };
+            TextContentViewModel = new TextContentViewModel() { SelectedFileCount = 1, ShowFullContent = true };
         }
 
         public bool Apply { get; set; }
 
-        public TextContentViewModel ContentViewModel { get; private set; }
+        public TextContentViewModel TextContentViewModel { get; private set; }
 
         public void UseInput()
         {
-            ContentViewModel.SelectedFileContent = InputString;
+            TextContentViewModel.SelectedFileContent = InputString;
             SettingInput = false;
         }
 
@@ -59,13 +59,19 @@ namespace SearchSharp.ViewModels
             {
                 _regexString = value; 
                 RaisePropertyChanged("RegexString");
+                RaisePropertyChanged("RegexIsValid");
                 UpdateTestContent();
             }
         }
 
+        public bool RegexIsValid
+        {
+            get { return RegexTester.IsValid(RegexString); }
+        }
+
         private void UpdateTestContent()
         {
-            ContentViewModel.ExecutedFileContentSearchParameters = new FileContentSearchParameters(RegexString, false, false, true, Options, ContentViewModel);
+            TextContentViewModel.ExecutedFileContentSearchParameters = new FileContentSearchParameters(RegexString, false, false, true, Options, TextContentViewModel);
         }
 
         public bool MultiLine
@@ -118,7 +124,23 @@ namespace SearchSharp.ViewModels
 
         public void CopyAsCSharp()
         {
-            var csharp = String.Format("var regex = new Regex(@\"{0}\");", RegexString);
+            var options = "";
+            const string multiLine = "RegexOptions.Multiline";
+            const string singleLine = "RegexOptions.Singleline";
+            if (MultiLine && SingleLine)
+            {
+                options = String.Format(", {0} | {1}", multiLine, singleLine);
+            }
+            else if (MultiLine)
+            {
+                options = ", " + multiLine;
+            }
+            else if (SingleLine)
+            {
+                options = ", " + singleLine;
+            }
+
+            var csharp = String.Format("var regex = new Regex(@\"{0}\"{1});", RegexString, options);
             System.Windows.Clipboard.SetDataObject(csharp);
         }
     }

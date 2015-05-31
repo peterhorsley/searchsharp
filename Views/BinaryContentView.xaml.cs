@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,11 @@ namespace SearchSharp.Views
         public BinaryContentView()
         {
             InitializeComponent();
+            if (DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+            }
+
             DataContextChanged += BinaryContentView_DataContextChanged;
         }
 
