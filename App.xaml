@@ -10,5 +10,12 @@
         <Converters:BytesToStringConverter x:Key="bytesToStringConverter"/>
         <Converters:DateTimeToTextConverter x:Key="dateTimeToTextConverter" />
         <Converters:ValidityToColorConverter x:Key="validityToColorConverter" />
+        <LinearGradientBrush StartPoint="0.4,0" EndPoint="0.6,1" x:Key="backgroundBrush">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="LightCyan" Offset="0"/>
+                <GradientStop Color="GreenYellow" Offset="1"/>
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+
     </Application.Resources>
 </Application>

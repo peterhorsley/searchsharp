@@ -5,13 +5,14 @@
         xmlns:Views="clr-namespace:SearchSharp.Views"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
+        Icon="../res/appicon.png"
         PreviewKeyDown="RegexWindow_OnPreviewKeyDown"
         Title="{Binding TitleText}" Height="400" Width="500" MinHeight="400" MinWidth="500">
     <Window.Resources>
         <Converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
         <Converters:BoolToVisibilityConverterInverted x:Key="boolToVisibilityConverterInverted"/>
     </Window.Resources>
-    <Grid>
+    <Grid Opacity="0.8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>

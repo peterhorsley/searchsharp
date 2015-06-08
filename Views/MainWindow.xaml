@@ -4,9 +4,10 @@
         xmlns:Converters="clr-namespace:SearchSharp.Converters"
         xmlns:Views="clr-namespace:SearchSharp.Views"
         Title="Sharp Search" Width="640" Height="480"
-        Background="Moccasin"
         WindowStartupLocation="CenterScreen"
         Icon="../res/appicon.png"
+        KeyDown="MainWindow_OnKeyDown"
+        Background="{StaticResource backgroundBrush}"
         WindowState="Maximized">
     <Window.Resources>
         <Style x:Key="dataGridStyle" TargetType="DataGrid">
@@ -19,7 +20,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid x:Name="_rootGrid">
+    <Grid x:Name="_rootGrid" Opacity="0.8">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -30,7 +31,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock HorizontalAlignment="Right" Margin="5,8">
+        <TextBlock HorizontalAlignment="Right" Margin="5,8"  VerticalAlignment="Top">
                 <Hyperlink x:Name="_regexTesterLink" Click="_regexTesterLink_OnClick">
                     Regex tester
                 </Hyperlink>
@@ -131,13 +132,13 @@
                   Style="{StaticResource dataGridStyle}"
                   AlternatingRowBackground="Lavender"
                   HorizontalGridLinesBrush="LightBlue"
+                  HeadersVisibility="Column"
                   VerticalGridLinesBrush="LightBlue"
                   SelectionUnit="FullRow"
                   SelectionMode="Extended"
                   MouseRightButtonUp="DataGrid_OnMouseRightButtonUp"
                   SelectionChanged="DataGrid_OnSelectionChanged"
-                      MouseDoubleClick="Control_OnMouseDoubleClick"
-                  
+                  MouseDoubleClick="Control_OnMouseDoubleClick"
                   >
             <DataGrid.Columns>
                 <DataGridTextColumn Width="4*" Header="Name" Binding="{Binding FileName}" IsReadOnly="True"></DataGridTextColumn>
@@ -200,5 +201,20 @@
                 <Views:BinaryContentView DataContext="{Binding BinaryContentViewModel}" />
             </TabItem>
         </TabControl>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" Margin="10,8"
+                    VerticalAlignment="Top">
+            <TextBlock >
+                <Hyperlink x:Name="_optionsLink" Click="_optionsLink_OnClick">
+                    Options
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Text="|" Margin="5,0"/>
+            <TextBlock>
+                <Hyperlink x:Name="_aboutLink" Click="_aboutLink_OnClick">
+                    About
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
     </Grid>
 </Window>

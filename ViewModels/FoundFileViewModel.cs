@@ -13,6 +13,7 @@ namespace SearchSharp.ViewModels
         public FoundFileViewModel(string filePath)
         {
             _path = filePath;
+
             try
             {
                 _sizeInBytes = new FileInfo(_path).Length;

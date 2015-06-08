@@ -1,0 +1,18 @@
+﻿<Window x:Class="SearchSharp.Views.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Search Sharp" Height="200" Width="350"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Icon="../res/appicon.png"
+        KeyDown="OptionsWindow_OnKeyDown"
+        Background="{StaticResource backgroundBrush}"
+        >
+    <StackPanel Margin="10">
+        <TextBlock Text="Options" FontSize="22"></TextBlock>
+        <CheckBox Margin="10" IsChecked="{Binding ContextMenuEnabled, Mode=TwoWay}">
+            Enable context menu in File Explorer
+        </CheckBox>
+    </StackPanel>
+</Window>

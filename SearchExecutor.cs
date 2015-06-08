@@ -68,42 +68,33 @@ namespace SearchSharp
             }
             else
             {
-                Regex regex;
-                RegexOptions options = mViewModel.FileSpecMatchCase ? RegexOptions.Compiled : RegexOptions.Compiled | RegexOptions.IgnoreCase;
-                if (mViewModel.FileSpecRegex)
-                {
-                    options |= mViewModel.FileSpecRegexOptions;
-                    try
-                    {
-                        regex = new Regex(mViewModel.FileSpec, options);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(String.Format("Invalid regex pattern '{0}' - {1}", mViewModel.FileSpecRegex, ex.Message));
-                        return;
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        regex = FindFilesPatternToRegex.Convert(mViewModel.FileSpec, options);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(String.Format("Invalid wildcard pattern '{0}' - {1}", mViewModel.FileSpecRegex, ex.Message));
-                        return;
-                    }
-                }
-
                 foreach (var file in allFiles)
                 {
-                    if (_worker.CancellationPending)
+                    if (_worker.CancellationPending || mViewModel.CompiledFileSpecRegex == null)
                     {
                         return;
                     }
 
-                    var isMatch = regex.IsMatch(Path.GetFileName(file));
+                    var fileName = Path.GetFileName(file);
+                    var isMatch = mViewModel.CompiledFileSpecRegex.IsMatch(fileName);
+
+                    // We also check if the filename contains the file spec string directly
+                    // if we are not using regex, so as to assume wildcards on both sides of the file spec.
+                    if (!isMatch && !mViewModel.FileSpecRegex)
+                    {
+                        var spec = mViewModel.FileSpec;
+                        if (!mViewModel.FileSpecMatchCase)
+                        {
+                            fileName = fileName.ToLowerInvariant();
+                            spec = spec.ToLowerInvariant();
+                        }
+
+                        if (fileName.Contains(spec))
+                        {
+                            isMatch = true;
+                        }
+                    }
+
                     if (isMatch != mViewModel.FileSpecNot)
                     {
                         matchingFileNames.Add(file);
@@ -142,20 +133,7 @@ namespace SearchSharp
                 {
                     if (mViewModel.ContainingTextRegex)
                     {
-                        RegexOptions options = mViewModel.ContainingTextMatchCase ? RegexOptions.Compiled : RegexOptions.Compiled | RegexOptions.IgnoreCase;
-                        options |= mViewModel.ContainingTextRegexOptions;
-                        Regex regex = null;
-                        try
-                        {
-                            regex = new Regex(mViewModel.ContainingText, options);
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLine(String.Format("Invalid regex pattern '{0}' - {1}", mViewModel.ContainingText, ex.Message));
-                            return;
-                        }
-
-                        match = regex.IsMatch(content);
+                        match = mViewModel.CompiledContainingTextRegex.IsMatch(content);
                     }
                     else
                     {

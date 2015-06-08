@@ -70,6 +70,10 @@
     <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\BinaryContentViewModel.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Compile Include="Views\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BinaryContentView.xaml.cs">
       <DependentUpon>BinaryContentView.xaml</DependentUpon>
     </Compile>
@@ -77,6 +81,9 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BytesToStringConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverterInverted.cs" />
+    <Compile Include="Views\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DataGridAttachedProperties.cs" />
     <Compile Include="Converters\DateTimeToTextConverter.cs" />
     <Compile Include="Views\TextContentView.xaml.cs">
@@ -101,9 +108,17 @@
       <DependentUpon>ucSpinnerCogs.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Page Include="Views\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BinaryContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OptionsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\TextContentView.xaml">
       <SubType>Designer</SubType>
@@ -178,6 +193,9 @@
       <Project>{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}</Project>
       <Name>Be.Windows.Forms.HexBox</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\feature.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

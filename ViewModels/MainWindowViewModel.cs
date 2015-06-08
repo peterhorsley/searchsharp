@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SearchSharp.ViewModels
 {
     public class MainWindowViewModel : ViewModel
     {
-        private string _searchPath = "c:\\code";
-        private string _fileSpec = "*.cs";
+        private string _searchPath = "";
+        private string _fileSpec = "";
         private string _containingText = "";
         private bool _firstSearchStarted;
         private List<FoundFileViewModel> mSelectedFiles;
@@ -30,9 +33,22 @@ namespace SearchSharp.ViewModels
         private BackgroundWorker _worker;
         private bool _searching;
         private long _maxFileSizeInBytesToShowContent = 1000000 * 250; // 250MB
+        private Regex _compiledFileSpecRegex;
+        private Regex _compiledContainingTextRegex;
 
         public MainWindowViewModel()
         {
+            // Only one argument is supported - the path in which to search.
+            var args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                var dir = args[1].Trim(new char[] { '"', '\\' }) + "\\";
+                if (Directory.Exists(dir))
+                {
+                    _searchPath = dir;
+                }
+            }
+
             FoundFiles = new ObservableCollection<FoundFileViewModel>();
             TextContentViewModel = new TextContentViewModel();
             BinaryContentViewModel = new BinaryContentViewModel();
@@ -77,6 +93,11 @@ namespace SearchSharp.ViewModels
                 }
                 return true;
             }
+        }
+
+        public Regex CompiledFileSpecRegex
+        {
+            get { return _compiledFileSpecRegex; }
         }
 
         public bool IsValidSearchPath
@@ -204,6 +225,11 @@ namespace SearchSharp.ViewModels
             get { return IsValidFileSpec && IsValidContainingText && IsValidSearchPath; }
         }
 
+        public Regex CompiledContainingTextRegex
+        {
+            get { return _compiledContainingTextRegex; }
+        }
+
         public bool ContainingTextRegex
         {
             get { return _containingTextRegex; }
@@ -279,6 +305,9 @@ namespace SearchSharp.ViewModels
                 RaisePropertyChanged("FoundTotalText");
             }
 
+            CreateFilenameRegex();
+            CreateContentRegex();
+
             TextContentViewModel.ExecutedFileContentSearchParameters = new FileContentSearchParameters(
                 ContainingText, 
                 ContainingTextMatchCase, 
@@ -290,6 +319,49 @@ namespace SearchSharp.ViewModels
             _worker.RunWorkerAsync();
         }
 
+        private void CreateContentRegex()
+        {
+            RegexOptions options = ContainingTextMatchCase ? RegexOptions.Compiled : RegexOptions.Compiled | RegexOptions.IgnoreCase;
+            options |= ContainingTextRegexOptions;
+            _compiledContainingTextRegex = null;
+            try
+            {
+                _compiledContainingTextRegex = new Regex(ContainingText, options);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(String.Format("Invalid regex pattern '{0}' - {1}", ContainingText, ex.Message));
+            }
+        }
+
+        private void CreateFilenameRegex()
+        {
+            _compiledFileSpecRegex = null;
+            RegexOptions options = FileSpecMatchCase ? RegexOptions.Compiled : RegexOptions.Compiled | RegexOptions.IgnoreCase;
+            if (FileSpecRegex)
+            {
+                options |= FileSpecRegexOptions;
+                try
+                {
+                    _compiledFileSpecRegex = new Regex(FileSpec, options);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(String.Format("Invalid regex pattern '{0}' - {1}", FileSpecRegex, ex.Message));
+                }
+            }
+            else
+            {
+                try
+                {
+                    _compiledFileSpecRegex = FindFilesPatternToRegex.Convert(FileSpec, options);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(String.Format("Invalid wildcard pattern '{0}' - {1}", FileSpecRegex, ex.Message));
+                }
+            }
+        }
 
 
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

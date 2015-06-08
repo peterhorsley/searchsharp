@@ -220,6 +220,26 @@ namespace SearchSharp.Views
                 Process.Start(file.FilePath);
             }
         }
+
+        private void _aboutLink_OnClick(object sender, RoutedEventArgs e)
+        {
+            var window = new AboutWindow {Owner = this};
+            window.ShowDialog();
+        }
+
+        private void _optionsLink_OnClick(object sender, RoutedEventArgs e)
+        {
+            var window = new OptionsWindow {Owner = this};
+            window.ShowDialog();
+        }
+
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+        }
     }
 }
 

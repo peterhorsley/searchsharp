@@ -1,0 +1,52 @@
+﻿<Window x:Class="SearchSharp.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About Search Sharp" Height="200" Width="350"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Icon="../res/appicon.png"
+        Background="{StaticResource backgroundBrush}"
+        KeyDown="AboutWindow_OnKeyDown"
+        >
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Search Sharp v1.0" FontSize="22"></TextBlock>
+            <TextBlock Text="A powerful search tool for programmers." FontSize="14"></TextBlock>
+            <StackPanel Margin="20,10">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../res/feature.png" Margin="5"/>
+                    <TextBlock Text="Built-in real-time regex tester and hex viewer." VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../res/feature.png" Margin="5"/>
+                    <TextBlock Text="Regex matching on file name and content." VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../res/feature.png" Margin="5"/>
+                    <TextBlock Text="Displays highlighted matches in file content." VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Grid.ColumnSpan="2">
+                <Hyperlink x:Name="_websiteLink" Click="_websiteLink_OnClick">
+                    http://zornsoftware.codenature.info
+                </Hyperlink>
+            </TextBlock>
+            <Button Grid.Column="1" HorizontalAlignment="Right" Width="100" Height="25"
+                Click="ButtonBase_OnClick"
+                >Close</Button>
+        </Grid>
+    </Grid>
+</Window>
