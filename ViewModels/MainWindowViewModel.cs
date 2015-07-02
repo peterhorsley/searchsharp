@@ -35,6 +35,7 @@ namespace SearchSharp.ViewModels
         private long _maxFileSizeInBytesToShowContent = 1000000 * 250; // 250MB
         private Regex _compiledFileSpecRegex;
         private Regex _compiledContainingTextRegex;
+        private BackgroundWorker _textContentThread;
 
         public MainWindowViewModel()
         {
@@ -408,6 +409,12 @@ namespace SearchSharp.ViewModels
 
         public void UpdateSelectFileContent()
         {
+            UpdateBinaryContent();
+            UpdateTextContent();
+        }
+
+        private void UpdateTextContent()
+        {
             if (SelectedFiles.Count == 1)
             {
                 var file = SelectedFiles.First();
@@ -415,18 +422,95 @@ namespace SearchSharp.ViewModels
 
                 if (!TextContentViewModel.SelectedFileTooBig)
                 {
-                    var content = File.ReadAllText(file.FilePath);
-                    TextContentViewModel.SelectedFileContent = content;
+                    if (_textContentThread != null)
+                    {
+                        _textContentThread.CancelAsync();
+                    }
+
+                    _textContentThread = new BackgroundWorker() {WorkerSupportsCancellation = true};
+                    _textContentThread.DoWork += textContentThread_DoWork;
+                    _textContentThread.RunWorkerAsync(new object[] { _textContentThread, file.FilePath });
+                    _textContentThread.RunWorkerCompleted += textContentThread_RunWorkerCompleted;
                 }
-                BinaryContentViewModel.LoadFile(file.FilePath);
             }
             else
             {
                 TextContentViewModel.LineNumbers = String.Empty;
-                BinaryContentViewModel.CloseFile();
             }
 
             TextContentViewModel.SelectedFileCount = SelectedFiles.Count;
+        }
+
+        void textContentThread_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _textContentThread = null;
+        }
+
+        void textContentThread_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var args = (object[]) e.Argument;
+            var worker = (BackgroundWorker)args[0];
+            var file = (string)args[1];
+
+            if (worker.CancellationPending)
+            {
+                return;
+            }
+
+            TextContentViewModel.IsBinary = IsFileProbablyBinary(file, worker);
+
+            if (worker.CancellationPending)
+            {
+                return;
+            }
+
+            if (!TextContentViewModel.IsBinary)
+            {
+                var content = File.ReadAllText(file);
+
+                if (worker.CancellationPending)
+                {
+                    return;
+                }
+
+                TextContentViewModel.SelectedFileContent = content;
+            }
+        }
+
+        private bool IsFileProbablyBinary(string file, BackgroundWorker worker)
+        {
+            using (var stream = File.OpenRead(file))
+            {
+                var data = 0;
+                while (data != -1)
+                {
+                    data = stream.ReadByte();
+                    if (data == 0)
+                    {
+                        return true;
+                    }
+                    if (worker.CancellationPending)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private void UpdateBinaryContent()
+        {
+            if (SelectedFiles.Count == 1)
+            {
+                var file = SelectedFiles.First();
+                BinaryContentViewModel.LoadFile(file.FilePath);
+            }
+            else
+            {
+                BinaryContentViewModel.CloseFile();
+            }
+
             BinaryContentViewModel.SelectedFileCount = SelectedFiles.Count;
         }
     }

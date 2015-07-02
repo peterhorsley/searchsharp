@@ -12,6 +12,7 @@ namespace SearchSharp.ViewModels
         private bool _selectedFileTooBig;
         private bool _showFullContent = false;
         private int _linesOfContext = 2;
+        private bool _isBinary;
 
         public TextContentViewModel()
         {
@@ -145,6 +146,19 @@ namespace SearchSharp.ViewModels
         public bool ContainingTextSpecifiedAndFileSelected
         {
             get { return ContainingTextSpecified && SingleFileSelected; }
+        }
+
+        public bool IsBinary
+        {
+            get { return _isBinary; }
+            set 
+            {
+                if (value != _isBinary)
+                {
+                    _isBinary = value;
+                    RaisePropertyChanged("IsBinary");
+                }
+            }
         }
 
         protected override void OnSelectedFileCountChanged()

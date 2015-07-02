@@ -37,6 +37,7 @@
                     <Binding Path="SelectedFileCount" />
                     <Binding Path="SelectedFileContent" />
                     <Binding Path="SelectedFileTooBig" />
+                    <Binding Path="IsBinary" />
                     <Binding Path="ShowFullContent" />
                     <Binding Path="LinesOfContext" />
                     <Binding Path="ExecutedFileContentSearchParameters" />

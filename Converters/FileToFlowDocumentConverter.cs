@@ -41,15 +41,22 @@ namespace SearchSharp.Converters
             else
             {
                 var tooBig = (bool)value[2];
+                var isBinary = (bool)value[3];
                 if (tooBig)
                 {
-                    doc.Blocks.Add(new Paragraph(new Run("Select file is too big to display.")));
+                    doc.Blocks.Add(new Paragraph(new Run("Selected file is too big to display.")));
+                }
+                else if (isBinary)
+                {
+                    var paragraph = new Paragraph();
+                    paragraph.Inlines.Add("Binary file selected, see Binary Content tab.");
+                    doc.Blocks.Add(paragraph);
                 }
                 else
                 {
-                    var contentSearchParameters = value[5] as FileContentSearchParameters;
-                    var showFullContent = (bool)value[3] || String.IsNullOrEmpty(contentSearchParameters.ContainingText) || contentSearchParameters.ContainingTextNot;
-                    _linesOfContext = (int)value[4];
+                    var contentSearchParameters = value[6] as FileContentSearchParameters;
+                    var showFullContent = (bool)value[4] || String.IsNullOrEmpty(contentSearchParameters.ContainingText) || contentSearchParameters.ContainingTextNot;
+                    _linesOfContext = (int)value[5];
                     var paragraphs = new List<Paragraph>();
 
                     if (!String.IsNullOrEmpty(contentSearchParameters.ContainingText) &&
