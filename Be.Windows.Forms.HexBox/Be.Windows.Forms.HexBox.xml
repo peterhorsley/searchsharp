@@ -4,101 +4,6 @@
         <name>Be.Windows.Forms.HexBox</name>
     </assembly>
     <members>
-        <member name="T:Be.Windows.Forms.HexCasing">
-            <summary>
-            Specifies the case of hex characters in the HexBox control
-            </summary>
-        </member>
-        <member name="F:Be.Windows.Forms.HexCasing.Upper">
-            <summary>
-            Converts all characters to uppercase.
-            </summary>
-        </member>
-        <member name="F:Be.Windows.Forms.HexCasing.Lower">
-            <summary>
-            Converts all characters to lowercase.
-            </summary>
-        </member>
-        <member name="T:Be.Windows.Forms.FindType">
-            <summary>
-            Defines the type of the Find operation.
-            </summary>
-        </member>
-        <member name="F:Be.Windows.Forms.FindType.Text">
-            <summary>
-            Used for Text Find operations
-            </summary>
-        </member>
-        <member name="F:Be.Windows.Forms.FindType.Hex">
-            <summary>
-            Used for Hex Find operations
-            </summary>
-        </member>
-        <member name="T:Be.Windows.Forms.FindOptions">
-            <summary>
-            Defines all state information nee
-            </summary>
-        </member>
-        <member name="F:Be.Windows.Forms.FindOptions._matchCase">
-            <summary>
-            Contains the MatchCase value
-            </summary>
-        </member>
-        <member name="F:Be.Windows.Forms.FindOptions._text">
-            <summary>
-            Contains the text that should be found.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FindOptions.UpdateFindBuffer">
-            <summary>
-            Updates the find buffer.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.IsValid">
-            <summary>
-            Gets or sets whether the Find options are valid
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.FindBuffer">
-            <summary>
-            Gets the Find buffer used for case insensitive Find operations. This is the binary representation of Text.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.FindBufferLowerCase">
-            <summary>
-            Gets the Find buffer used for case sensitive Find operations. This is the binary representation of Text in lower case format.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.FindBufferUpperCase">
-            <summary>
-            Gets the Find buffer used for case sensitive Find operations. This is the binary representation of Text in upper case format.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.MatchCase">
-            <summary>
-            Gets or sets the value, whether the Find operation is case sensitive or not.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.Text">
-            <summary>
-            Gets or sets the text that should be found. Only used, when Type is FindType.Hex.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.Hex">
-            <summary>
-            Gets or sets the hex buffer that should be found. Only used, when Type is FindType.Hex.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FindOptions.Type">
-            <summary>
-            Gets or sets the type what should be searched.
-            </summary>
-        </member>
-        <member name="T:Be.Windows.Forms.BytePositionInfo">
-            <summary>
-            Represents a position in the HexBox control
-            </summary>
-        </member>
         <member name="T:Be.Windows.Forms.BuiltInContextMenu">
             <summary>
             Defines a build-in ContextMenuStrip manager for HexBox control to show Copy, Cut, Paste menu in contextmenu of the control.
@@ -245,6 +150,98 @@
         <member name="P:Be.Windows.Forms.BuiltInContextMenu.SelectAllMenuItemImage">
             <summary>
             Gets or sets the image of the "Select All" ContextMenuStrip item.
+            </summary>
+        </member>
+        <member name="T:Be.Windows.Forms.ByteCollection">
+            <summary>
+            Represents a collection of bytes.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.#ctor">
+            <summary>
+            Initializes a new instance of ByteCollection class.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of ByteCollection class.
+            </summary>
+            <param name="bs">an array of bytes to add to collection</param>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.Add(System.Byte)">
+            <summary>
+            Adds a byte into the collection.
+            </summary>
+            <param name="b">the byte to add</param>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.AddRange(System.Byte[])">
+            <summary>
+            Adds a range of bytes to the collection.
+            </summary>
+            <param name="bs">the bytes to add</param>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.Remove(System.Byte)">
+            <summary>
+            Removes a byte from the collection.
+            </summary>
+            <param name="b">the byte to remove</param>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.RemoveRange(System.Int32,System.Int32)">
+            <summary>
+            Removes a range of bytes from the collection.
+            </summary>
+            <param name="index">the index of the start byte</param>
+            <param name="count">the count of the bytes to remove</param>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.InsertRange(System.Int32,System.Byte[])">
+            <summary>
+            Inserts a range of bytes to the collection.
+            </summary>
+            <param name="index">the index of start byte</param>
+            <param name="bs">an array of bytes to insert</param>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.GetBytes">
+            <summary>
+            Gets all bytes in the array
+            </summary>
+            <returns>an array of bytes.</returns>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.Insert(System.Int32,System.Byte)">
+            <summary>
+            Inserts a byte to the collection.
+            </summary>
+            <param name="index">the index</param>
+            <param name="b">a byte to insert</param>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.IndexOf(System.Byte)">
+            <summary>
+            Returns the index of the given byte.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.Contains(System.Byte)">
+            <summary>
+            Returns true, if the byte exists in the collection.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.CopyTo(System.Byte[],System.Int32)">
+            <summary>
+            Copies the content of the collection into the given array.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.ByteCollection.ToArray">
+            <summary>
+            Copies the content of the collection into an array.
+            </summary>
+            <returns>the array containing all bytes.</returns>
+        </member>
+        <member name="P:Be.Windows.Forms.ByteCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the value of a byte
+            </summary>
+        </member>
+        <member name="T:Be.Windows.Forms.BytePositionInfo">
+            <summary>
+            Represents a position in the HexBox control
             </summary>
         </member>
         <member name="T:Be.Windows.Forms.DynamicByteProvider">
@@ -433,6 +430,331 @@
         <member name="P:Be.Windows.Forms.DynamicByteProvider.Length">
             <summary>
             Gets the length of the bytes in the byte collection.
+            </summary>
+        </member>
+        <member name="T:Be.Windows.Forms.DynamicFileByteProvider">
+            <summary>
+            Implements a fully editable byte provider for file data of any size.
+            </summary>
+            <remarks>
+            Only changes to the file are stored in memory with reads from the
+            original data occurring as required.
+            </remarks>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.#ctor(System.String)">
+            <summary>
+            Constructs a new <see cref="T:Be.Windows.Forms.DynamicFileByteProvider"/> instance.
+            </summary>
+            <param name="fileName">The name of the file from which bytes should be provided.</param>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructs a new <see cref="T:Be.Windows.Forms.DynamicFileByteProvider"/> instance.
+            </summary>
+            <param name="fileName">The name of the file from which bytes should be provided.</param>
+            <param name="readOnly">True, opens the file in read-only mode.</param>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.#ctor(System.IO.Stream)">
+            <summary>
+            Constructs a new <see cref="T:Be.Windows.Forms.DynamicFileByteProvider"/> instance.
+            </summary>
+            <param name="stream">the stream containing the data.</param>
+            <remarks>
+            The stream must supported seek operations.
+            </remarks>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.ReadByte(System.Int64)">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.ReadByte(System.Int64)"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.WriteByte(System.Int64,System.Byte)">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.WriteByte(System.Int64,System.Byte)"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.InsertBytes(System.Int64,System.Byte[])">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.InsertBytes(System.Int64,System.Byte[])"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.DeleteBytes(System.Int64,System.Int64)">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.DeleteBytes(System.Int64,System.Int64)"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.HasChanges">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.HasChanges"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.ApplyChanges">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.ApplyChanges"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.SupportsWriteByte">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.SupportsWriteByte"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.SupportsInsertBytes">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.SupportsInsertBytes"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.SupportsDeleteBytes">
+            <summary>
+            See <see cref="M:Be.Windows.Forms.IByteProvider.SupportsDeleteBytes"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.Finalize">
+            <summary>
+            See <see cref="M:System.Object.Finalize"/> for more information.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.Dispose">
+            <summary>
+            See <see cref="M:System.IDisposable.Dispose"/> for more information.
+            </summary>
+        </member>
+        <member name="E:Be.Windows.Forms.DynamicFileByteProvider.LengthChanged">
+            <summary>
+            See <see cref="E:Be.Windows.Forms.IByteProvider.LengthChanged"/> for more information.
+            </summary>
+        </member>
+        <member name="E:Be.Windows.Forms.DynamicFileByteProvider.Changed">
+            <summary>
+            See <see cref="E:Be.Windows.Forms.IByteProvider.Changed"/> for more information.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.DynamicFileByteProvider.Length">
+            <summary>
+            See <see cref="P:Be.Windows.Forms.IByteProvider.Length"/> for more information.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.DynamicFileByteProvider.ReadOnly">
+            <summary>
+            Gets a value, if the file is opened in read-only mode.
+            </summary>
+        </member>
+        <member name="T:Be.Windows.Forms.FileByteProvider">
+            <summary>
+            Byte provider for (big) files.
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FileByteProvider._writes">
+            <summary>
+            Contains all changes
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FileByteProvider._fileName">
+            <summary>
+            Contains the file name.
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FileByteProvider._fileStream">
+            <summary>
+            Contains the file stream.
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FileByteProvider._readOnly">
+            <summary>
+            Read-only access.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the FileByteProvider class.
+            </summary>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.Finalize">
+            <summary>
+            Terminates the instance of the FileByteProvider class.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.OnChanged(System.EventArgs)">
+            <summary>
+            Raises the Changed event.
+            </summary>
+            <remarks>Never used.</remarks>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.HasChanges">
+            <summary>
+            Returns a value if there are some changes.
+            </summary>
+            <returns>true, if there are some changes</returns>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.ApplyChanges">
+            <summary>
+            Updates the file with all changes the write buffer contains.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.RejectChanges">
+            <summary>
+            Clears the write buffer and reject all changes made.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.ReadByte(System.Int64)">
+            <summary>
+            Reads a byte from the file.
+            </summary>
+            <param name="index">the index of the byte to read</param>
+            <returns>the byte</returns>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.WriteByte(System.Int64,System.Byte)">
+            <summary>
+            Writes a byte into write buffer
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.DeleteBytes(System.Int64,System.Int64)">
+            <summary>
+            Not supported
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.InsertBytes(System.Int64,System.Byte[])">
+            <summary>
+            Not supported
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.SupportsWriteByte">
+            <summary>
+            Returns true
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.SupportsInsertBytes">
+            <summary>
+            Returns false
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.SupportsDeleteBytes">
+            <summary>
+            Returns false
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.Dispose">
+            <summary>
+            Releases the file handle used by the FileByteProvider.
+            </summary>
+        </member>
+        <member name="E:Be.Windows.Forms.FileByteProvider.Changed">
+            <summary>
+            Occurs, when the write buffer contains new changes.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FileByteProvider.FileName">
+            <summary>
+            Gets the name of the file the byte provider is using.
+            </summary>
+        </member>
+        <member name="E:Be.Windows.Forms.FileByteProvider.LengthChanged">
+            <summary>
+            Never used.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FileByteProvider.Length">
+            <summary>
+            Gets the length of the file.
+            </summary>
+        </member>
+        <member name="T:Be.Windows.Forms.FileByteProvider.WriteCollection">
+            <summary>
+            Represents the write buffer class
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.WriteCollection.Add(System.Int64,System.Byte)">
+            <summary>
+            Adds a byte into the collection
+            </summary>
+            <param name="index">the index of the byte</param>
+            <param name="value">the value of the byte</param>
+        </member>
+        <member name="M:Be.Windows.Forms.FileByteProvider.WriteCollection.Contains(System.Int64)">
+            <summary>
+            Determines if a byte with the given index exists.
+            </summary>
+            <param name="index">the index of the byte</param>
+            <returns>true, if the is in the collection</returns>
+        </member>
+        <member name="P:Be.Windows.Forms.FileByteProvider.WriteCollection.Item(System.Int64)">
+            <summary>
+            Gets or sets a byte in the collection
+            </summary>
+        </member>
+        <member name="T:Be.Windows.Forms.FindType">
+            <summary>
+            Defines the type of the Find operation.
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FindType.Text">
+            <summary>
+            Used for Text Find operations
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FindType.Hex">
+            <summary>
+            Used for Hex Find operations
+            </summary>
+        </member>
+        <member name="T:Be.Windows.Forms.FindOptions">
+            <summary>
+            Defines all state information nee
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FindOptions._matchCase">
+            <summary>
+            Contains the MatchCase value
+            </summary>
+        </member>
+        <member name="F:Be.Windows.Forms.FindOptions._text">
+            <summary>
+            Contains the text that should be found.
+            </summary>
+        </member>
+        <member name="M:Be.Windows.Forms.FindOptions.UpdateFindBuffer">
+            <summary>
+            Updates the find buffer.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.IsValid">
+            <summary>
+            Gets or sets whether the Find options are valid
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.FindBuffer">
+            <summary>
+            Gets the Find buffer used for case insensitive Find operations. This is the binary representation of Text.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.FindBufferLowerCase">
+            <summary>
+            Gets the Find buffer used for case sensitive Find operations. This is the binary representation of Text in lower case format.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.FindBufferUpperCase">
+            <summary>
+            Gets the Find buffer used for case sensitive Find operations. This is the binary representation of Text in upper case format.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.MatchCase">
+            <summary>
+            Gets or sets the value, whether the Find operation is case sensitive or not.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.Text">
+            <summary>
+            Gets or sets the text that should be found. Only used, when Type is FindType.Hex.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.Hex">
+            <summary>
+            Gets or sets the hex buffer that should be found. Only used, when Type is FindType.Hex.
+            </summary>
+        </member>
+        <member name="P:Be.Windows.Forms.FindOptions.Type">
+            <summary>
+            Gets or sets the type what should be searched.
             </summary>
         </member>
         <member name="T:Be.Windows.Forms.HexBox">
@@ -1317,232 +1639,19 @@
             Handles user input such as mouse and keyboard input during string view edit
             </summary>
         </member>
-        <member name="T:Be.Windows.Forms.ByteCollection">
+        <member name="T:Be.Windows.Forms.HexCasing">
             <summary>
-            Represents a collection of bytes.
+            Specifies the case of hex characters in the HexBox control
             </summary>
         </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.#ctor">
+        <member name="F:Be.Windows.Forms.HexCasing.Upper">
             <summary>
-            Initializes a new instance of ByteCollection class.
+            Converts all characters to uppercase.
             </summary>
         </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.#ctor(System.Byte[])">
+        <member name="F:Be.Windows.Forms.HexCasing.Lower">
             <summary>
-            Initializes a new instance of ByteCollection class.
-            </summary>
-            <param name="bs">an array of bytes to add to collection</param>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.Add(System.Byte)">
-            <summary>
-            Adds a byte into the collection.
-            </summary>
-            <param name="b">the byte to add</param>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.AddRange(System.Byte[])">
-            <summary>
-            Adds a range of bytes to the collection.
-            </summary>
-            <param name="bs">the bytes to add</param>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.Remove(System.Byte)">
-            <summary>
-            Removes a byte from the collection.
-            </summary>
-            <param name="b">the byte to remove</param>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.RemoveRange(System.Int32,System.Int32)">
-            <summary>
-            Removes a range of bytes from the collection.
-            </summary>
-            <param name="index">the index of the start byte</param>
-            <param name="count">the count of the bytes to remove</param>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.InsertRange(System.Int32,System.Byte[])">
-            <summary>
-            Inserts a range of bytes to the collection.
-            </summary>
-            <param name="index">the index of start byte</param>
-            <param name="bs">an array of bytes to insert</param>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.GetBytes">
-            <summary>
-            Gets all bytes in the array
-            </summary>
-            <returns>an array of bytes.</returns>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.Insert(System.Int32,System.Byte)">
-            <summary>
-            Inserts a byte to the collection.
-            </summary>
-            <param name="index">the index</param>
-            <param name="b">a byte to insert</param>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.IndexOf(System.Byte)">
-            <summary>
-            Returns the index of the given byte.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.Contains(System.Byte)">
-            <summary>
-            Returns true, if the byte exists in the collection.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.CopyTo(System.Byte[],System.Int32)">
-            <summary>
-            Copies the content of the collection into the given array.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.ByteCollection.ToArray">
-            <summary>
-            Copies the content of the collection into an array.
-            </summary>
-            <returns>the array containing all bytes.</returns>
-        </member>
-        <member name="P:Be.Windows.Forms.ByteCollection.Item(System.Int32)">
-            <summary>
-            Gets or sets the value of a byte
-            </summary>
-        </member>
-        <member name="F:Be.Windows.Forms.Util._designMode">
-            <summary>
-            Contains true, if we are in design mode of Visual Studio
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.Util.#cctor">
-            <summary>
-            Initializes an instance of Util class
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.Util.DesignMode">
-            <summary>
-            Gets true, if we are in design mode of Visual Studio
-            </summary>
-            <remarks>
-            In Visual Studio 2008 SP1 the designer is crashing sometimes on windows forms. 
-            The DesignMode property of Control class is buggy and cannot be used, so use our own implementation instead.
-            </remarks>
-        </member>
-        <member name="T:Be.Windows.Forms.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="T:Be.Windows.Forms.DynamicFileByteProvider">
-            <summary>
-            Implements a fully editable byte provider for file data of any size.
-            </summary>
-            <remarks>
-            Only changes to the file are stored in memory with reads from the
-            original data occurring as required.
-            </remarks>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.#ctor(System.String)">
-            <summary>
-            Constructs a new <see cref="T:Be.Windows.Forms.DynamicFileByteProvider"/> instance.
-            </summary>
-            <param name="fileName">The name of the file from which bytes should be provided.</param>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.#ctor(System.String,System.Boolean)">
-            <summary>
-            Constructs a new <see cref="T:Be.Windows.Forms.DynamicFileByteProvider"/> instance.
-            </summary>
-            <param name="fileName">The name of the file from which bytes should be provided.</param>
-            <param name="readOnly">True, opens the file in read-only mode.</param>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.#ctor(System.IO.Stream)">
-            <summary>
-            Constructs a new <see cref="T:Be.Windows.Forms.DynamicFileByteProvider"/> instance.
-            </summary>
-            <param name="stream">the stream containing the data.</param>
-            <remarks>
-            The stream must supported seek operations.
-            </remarks>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.ReadByte(System.Int64)">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.ReadByte(System.Int64)"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.WriteByte(System.Int64,System.Byte)">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.WriteByte(System.Int64,System.Byte)"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.InsertBytes(System.Int64,System.Byte[])">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.InsertBytes(System.Int64,System.Byte[])"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.DeleteBytes(System.Int64,System.Int64)">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.DeleteBytes(System.Int64,System.Int64)"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.HasChanges">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.HasChanges"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.ApplyChanges">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.ApplyChanges"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.SupportsWriteByte">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.SupportsWriteByte"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.SupportsInsertBytes">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.SupportsInsertBytes"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.SupportsDeleteBytes">
-            <summary>
-            See <see cref="M:Be.Windows.Forms.IByteProvider.SupportsDeleteBytes"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.Finalize">
-            <summary>
-            See <see cref="M:System.Object.Finalize"/> for more information.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.DynamicFileByteProvider.Dispose">
-            <summary>
-            See <see cref="M:System.IDisposable.Dispose"/> for more information.
-            </summary>
-        </member>
-        <member name="E:Be.Windows.Forms.DynamicFileByteProvider.LengthChanged">
-            <summary>
-            See <see cref="E:Be.Windows.Forms.IByteProvider.LengthChanged"/> for more information.
-            </summary>
-        </member>
-        <member name="E:Be.Windows.Forms.DynamicFileByteProvider.Changed">
-            <summary>
-            See <see cref="E:Be.Windows.Forms.IByteProvider.Changed"/> for more information.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.DynamicFileByteProvider.Length">
-            <summary>
-            See <see cref="P:Be.Windows.Forms.IByteProvider.Length"/> for more information.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.DynamicFileByteProvider.ReadOnly">
-            <summary>
-            Gets a value, if the file is opened in read-only mode.
+            Converts all characters to lowercase.
             </summary>
         </member>
         <member name="T:Be.Windows.Forms.IByteCharConverter">
@@ -1620,149 +1729,40 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Be.Windows.Forms.FileByteProvider">
+        <member name="T:Be.Windows.Forms.Properties.Resources">
             <summary>
-            Byte provider for (big) files.
+              A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
-        <member name="F:Be.Windows.Forms.FileByteProvider._writes">
+        <member name="P:Be.Windows.Forms.Properties.Resources.ResourceManager">
             <summary>
-            Contains all changes
+              Returns the cached ResourceManager instance used by this class.
             </summary>
         </member>
-        <member name="F:Be.Windows.Forms.FileByteProvider._fileName">
+        <member name="P:Be.Windows.Forms.Properties.Resources.Culture">
             <summary>
-            Contains the file name.
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
-        <member name="F:Be.Windows.Forms.FileByteProvider._fileStream">
+        <member name="F:Be.Windows.Forms.Util._designMode">
             <summary>
-            Contains the file stream.
+            Contains true, if we are in design mode of Visual Studio
             </summary>
         </member>
-        <member name="F:Be.Windows.Forms.FileByteProvider._readOnly">
+        <member name="M:Be.Windows.Forms.Util.#cctor">
             <summary>
-            Read-only access.
+            Initializes an instance of Util class
             </summary>
         </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.#ctor(System.String)">
+        <member name="P:Be.Windows.Forms.Util.DesignMode">
             <summary>
-            Initializes a new instance of the FileByteProvider class.
+            Gets true, if we are in design mode of Visual Studio
             </summary>
-            <param name="fileName"></param>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.Finalize">
-            <summary>
-            Terminates the instance of the FileByteProvider class.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.OnChanged(System.EventArgs)">
-            <summary>
-            Raises the Changed event.
-            </summary>
-            <remarks>Never used.</remarks>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.HasChanges">
-            <summary>
-            Returns a value if there are some changes.
-            </summary>
-            <returns>true, if there are some changes</returns>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.ApplyChanges">
-            <summary>
-            Updates the file with all changes the write buffer contains.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.RejectChanges">
-            <summary>
-            Clears the write buffer and reject all changes made.
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.ReadByte(System.Int64)">
-            <summary>
-            Reads a byte from the file.
-            </summary>
-            <param name="index">the index of the byte to read</param>
-            <returns>the byte</returns>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.WriteByte(System.Int64,System.Byte)">
-            <summary>
-            Writes a byte into write buffer
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.DeleteBytes(System.Int64,System.Int64)">
-            <summary>
-            Not supported
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.InsertBytes(System.Int64,System.Byte[])">
-            <summary>
-            Not supported
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.SupportsWriteByte">
-            <summary>
-            Returns true
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.SupportsInsertBytes">
-            <summary>
-            Returns false
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.SupportsDeleteBytes">
-            <summary>
-            Returns false
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.Dispose">
-            <summary>
-            Releases the file handle used by the FileByteProvider.
-            </summary>
-        </member>
-        <member name="E:Be.Windows.Forms.FileByteProvider.Changed">
-            <summary>
-            Occurs, when the write buffer contains new changes.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FileByteProvider.FileName">
-            <summary>
-            Gets the name of the file the byte provider is using.
-            </summary>
-        </member>
-        <member name="E:Be.Windows.Forms.FileByteProvider.LengthChanged">
-            <summary>
-            Never used.
-            </summary>
-        </member>
-        <member name="P:Be.Windows.Forms.FileByteProvider.Length">
-            <summary>
-            Gets the length of the file.
-            </summary>
-        </member>
-        <member name="T:Be.Windows.Forms.FileByteProvider.WriteCollection">
-            <summary>
-            Represents the write buffer class
-            </summary>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.WriteCollection.Add(System.Int64,System.Byte)">
-            <summary>
-            Adds a byte into the collection
-            </summary>
-            <param name="index">the index of the byte</param>
-            <param name="value">the value of the byte</param>
-        </member>
-        <member name="M:Be.Windows.Forms.FileByteProvider.WriteCollection.Contains(System.Int64)">
-            <summary>
-            Determines if a byte with the given index exists.
-            </summary>
-            <param name="index">the index of the byte</param>
-            <returns>true, if the is in the collection</returns>
-        </member>
-        <member name="P:Be.Windows.Forms.FileByteProvider.WriteCollection.Item(System.Int64)">
-            <summary>
-            Gets or sets a byte in the collection
-            </summary>
+            <remarks>
+            In Visual Studio 2008 SP1 the designer is crashing sometimes on windows forms. 
+            The DesignMode property of Control class is buggy and cannot be used, so use our own implementation instead.
+            </remarks>
         </member>
     </members>
 </doc>
