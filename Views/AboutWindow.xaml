@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <TextBlock Text="Search Sharp v1.0" FontSize="22"></TextBlock>
-            <TextBlock Text="A powerful search tool for power users." FontSize="14"></TextBlock>
+            <TextBlock Text="A search tool for power users." FontSize="14"></TextBlock>
             <StackPanel Margin="20,10">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="../res/feature.png" Margin="5"/>
