@@ -31,12 +31,6 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock HorizontalAlignment="Right" Margin="5,8"  VerticalAlignment="Top">
-                <Hyperlink x:Name="_regexTesterLink" Click="_regexTesterLink_OnClick">
-                    Regex tester
-                </Hyperlink>
-        </TextBlock>
-
         <TabControl Margin="5,5,2,5">
             <TabItem Header="Search">
                 <Grid>
@@ -127,7 +121,13 @@
                 </TabItem>
             </TabControl>
 
-            <DataGrid Grid.Row="1" Margin="5,5,2,5" ItemsSource="{Binding FoundFiles}" AutoGenerateColumns="False"
+        <TextBlock HorizontalAlignment="Right" Margin="5,8"  VerticalAlignment="Top">
+            <Hyperlink x:Name="_regexTesterLink" Click="_regexTesterLink_OnClick">
+                Regex tester
+            </Hyperlink>
+        </TextBlock>
+
+        <DataGrid Grid.Row="1" Margin="5,5,2,5" ItemsSource="{Binding FoundFiles}" AutoGenerateColumns="False"
                   Views:DataGridAttachedProperties.CanUserHideColumns="true"
                   Style="{StaticResource dataGridStyle}"
                   AlternatingRowBackground="Lavender"

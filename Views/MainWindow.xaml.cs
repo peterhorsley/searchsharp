@@ -209,7 +209,7 @@ namespace SearchSharp.Views
                 TitleText = "Regex Tester",
             };
             var regexWindow = new RegexWindow(regexViewModel, this);
-            regexWindow.ShowDialog();
+            regexWindow.Show();
         }
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)

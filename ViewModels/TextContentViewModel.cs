@@ -66,6 +66,10 @@ namespace SearchSharp.ViewModels
 
         public static string[] SplitStringIntoLines(string content)
         {
+            if (content == null)
+            {
+                return new string[0];
+            }
             var contentWithJustLineFeed = content.Replace("\r\n", "\n");
             return contentWithJustLineFeed.Split(new char[] {'\n'});
         }

@@ -51,7 +51,19 @@
                           >Single-line</CheckBox>
             </StackPanel>
         </Grid>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="7,4">
+        <TabControl Grid.Row="1" Margin="5,0" VerticalAlignment="Stretch" >
+            <TabItem Header="Test input">
+                <Grid>
+                    <Grid Visibility="{Binding SettingInput, Converter={StaticResource boolToVisibilityConverter}}">
+                        <TextBox Text="{Binding InputString}" AcceptsReturn="True" x:Name="_inputTextBox"/>
+                    </Grid>
+                    <Grid Visibility="{Binding SettingInput, Converter={StaticResource boolToVisibilityConverterInverted}}">
+                        <Views:TextContentView DataContext="{Binding TextContentViewModel}" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="7,4" VerticalAlignment="Top">
             <TextBlock Visibility="{Binding SettingInput, Converter={StaticResource boolToVisibilityConverter}}">
                 <Hyperlink x:Name="_useInputLink" Click="_useInputLink_OnClick">
                     Use input
@@ -68,18 +80,6 @@
                 </Hyperlink>
             </TextBlock>
         </StackPanel>
-        <TabControl Grid.Row="1" Margin="5,0" VerticalAlignment="Stretch" >
-            <TabItem Header="Test input">
-                <Grid>
-                    <Grid Visibility="{Binding SettingInput, Converter={StaticResource boolToVisibilityConverter}}">
-                        <TextBox Text="{Binding InputString}" AcceptsReturn="True" x:Name="_inputTextBox"/>
-                    </Grid>
-                    <Grid Visibility="{Binding SettingInput, Converter={StaticResource boolToVisibilityConverterInverted}}">
-                        <Views:TextContentView DataContext="{Binding TextContentViewModel}" />
-                    </Grid>
-                </Grid>
-            </TabItem>
-        </TabControl>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
             <Button x:Name="_applyButton" Click="_applyButton_OnClick" MinWidth="70" Height="23">
                 Apply
